@@ -1,0 +1,51 @@
+{
+  "about": "Every web component the team has. Human view: https://demos.linkedtrust.us/baobab/components/ . Rules for cards: https://github.com/Cooperation-org/baobab/blob/main/CONTRACT.md section 2. contract=true means it follows them.",
+  "components": [
+    {"tag": "lt-claims", "src": "https://demos.linkedtrust.us/baobab/components/lt-claims.js", "what": "Recent LinkedTrust claims, filtered, refreshed on a timer", "signin": false, "contract": true,
+     "attributes": {"data-up": "LinkedTrust server, e.g. https://live.linkedtrust.us", "data-query": "text match", "data-filter": "ratings | credentials", "data-subject": "exact subject URI", "data-claim": "claim type", "data-issuer": "issuer id", "data-limit": "default 10", "data-refresh": "seconds, default 60, 0 = never"},
+     "reads": ["GET /api/feed", "GET /api/claim"]},
+    {"tag": "atproto-thread", "src": "https://demos.linkedtrust.us/baobab/components/atproto-thread.js", "what": "Replies to one Bluesky post, shown as comments on a page; people comment by replying on Bluesky", "signin": false, "contract": true,
+     "attributes": {"data-up": "AT Proto app view, e.g. https://public.api.bsky.app", "data-post": "bsky.app post link or at:// URI", "data-depth": "default 3", "data-refresh": "seconds, default 60"},
+     "reads": ["app.bsky.feed.getPostThread", "com.atproto.identity.resolveHandle"]},
+    {"tag": "atproto-feed", "src": "https://demos.linkedtrust.us/baobab/components/atproto-feed.js", "what": "Latest posts from one Bluesky account", "signin": false, "contract": true,
+     "attributes": {"data-up": "AT Proto app view", "data-actor": "handle or DID", "data-limit": "default 5", "data-replies": "yes to include replies", "data-refresh": "seconds, default 120"},
+     "reads": ["app.bsky.feed.getAuthorFeed"]},
+
+    {"tag": "baobab-grid", "src": "frame: /static/embed/grid.js; GovKit: https://dash.workers.vc/static/embed/grid.js", "what": "Holds a page's cards; each person arranges them; saved per person", "signin": true, "contract": true,
+     "attributes": {"data-up": "the frame", "data-dashboard": "which saved layout", "children": "data-card, data-w (1-12), data-autohide, data-tool"}},
+    {"tag": "baobab-nav", "src": "frame: /static/embed/nav.js", "what": "The frame's bar with an account menu", "signin": false, "contract": true,
+     "attributes": {"data-up": "the frame (default: the one that served the script)"}},
+    {"tag": "cohort-nav", "src": "https://workers.vc/static/embed/cohort-nav.js", "what": "The workers.vc bar", "signin": false, "contract": true,
+     "attributes": {"data-org": "", "data-current": "", "data-site-url": "", "data-org-name": "", "data-vc-org": "", "data-chat-url": "", "data-calendar-url": ""}},
+
+    {"tag": "govkit-tasks", "src": "https://dash.workers.vc/static/embed/govkit.js", "what": "Open Taiga tasks, read server-side by GovKit; drag order saves to Taiga", "signin": true, "contract": true, "attributes": {"data-up": "", "data-org": "", "data-limit": "", "data-tasks-app": "Chiku base URL"}},
+    {"tag": "govkit-checklist", "src": "https://dash.workers.vc/static/embed/govkit.js", "what": "Curriculum checklist", "signin": true, "contract": true, "attributes": {"data-up": "", "data-org": "", "data-week": "", "data-reading": "", "data-tasks-app": ""}},
+    {"tag": "govkit-pie", "src": "https://dash.workers.vc/static/embed/govkit.js", "what": "Equity pie with legend", "signin": true, "contract": true, "attributes": {"data-up": "", "data-org": ""}},
+    {"tag": "govkit-feed", "src": "https://dash.workers.vc/static/embed/govkit.js", "what": "Earned on tasks", "signin": true, "contract": true, "attributes": {"data-up": "", "data-org": "", "data-limit": ""}},
+    {"tag": "govkit-money", "src": "https://dash.workers.vc/static/embed/govkit.js", "what": "Projects, deals, totals", "signin": true, "contract": true, "attributes": {"data-up": "", "data-org": ""}},
+    {"tag": "govkit-activity", "src": "https://dash.workers.vc/static/embed/govkit.js", "what": "The org's attention rail", "signin": true, "contract": true, "attributes": {"data-up": "", "data-org": "", "data-limit": ""}},
+    {"tag": "govkit-ventures", "src": "https://dash.workers.vc/static/embed/govkit.js", "what": "Every venture, with raise-a-hand", "signin": true, "contract": true, "attributes": {"data-up": "", "data-limit": ""}},
+    {"tag": "govkit-news", "src": "https://dash.workers.vc/static/embed/govkit.js", "what": "What ventures did about the viewer", "signin": true, "contract": true, "attributes": {"data-up": "", "data-limit": ""}},
+
+    {"tag": "amebo-ask", "src": "https://amebo.workers.vc/embed/amebo.js", "what": "Ask amebo", "signin": true, "contract": true, "attributes": {"data-up": ""}},
+    {"tag": "amebo-goals", "src": "https://amebo.workers.vc/embed/amebo.js", "what": "The org's goals, edited in place", "signin": true, "contract": true, "attributes": {"data-up": "", "data-limit": ""}},
+    {"tag": "amebo-skills", "src": "https://amebo.workers.vc/embed/amebo.js", "what": "Buttons that open amebo chat with a question ready", "signin": true, "contract": true, "attributes": {"data-up": "", "data-audience": ""}},
+    {"tag": "amebo-claws", "src": "https://amebo.workers.vc/embed/amebo.js", "what": "amebo's running jobs", "signin": true, "contract": true, "attributes": {"data-up": "", "data-status": "", "data-limit": ""}},
+    {"tag": "amebo-goal", "src": "https://amebo.workers.vc/embed/amebo.js", "what": "One running job", "signin": true, "contract": true, "attributes": {"data-up": ""}},
+    {"tag": "amebo-create-claw", "src": "https://amebo.workers.vc/embed/amebo.js", "what": "Start a job", "signin": true, "contract": true, "attributes": {"data-up": ""}},
+    {"tag": "amebo-digest", "src": "https://amebo.workers.vc/embed/amebo.js", "what": "amebo's digest", "signin": true, "contract": true, "attributes": {"data-up": ""}},
+
+    {"tag": "crm-reachout", "src": "https://crm-<org>.workers.vc/crm_outreach_runner/static/src/embed/crm-reachout.js", "what": "People to reach out to next", "signin": true, "contract": true, "attributes": {"data-up": "", "data-limit": ""}},
+    {"tag": "crm-heard", "src": "https://crm-<org>.workers.vc/crm_outreach_runner/static/src/embed/crm-reachout.js", "what": "The newest things people said, from lead notes", "signin": true, "contract": true, "attributes": {"data-up": "", "data-limit": ""}},
+
+    {"tag": "linked-badge", "src": "https://live.linkedtrust.us/badge.js", "what": "One verified claim as a badge", "signin": false, "contract": false, "attributes": {"claim-id": "", "layout": "", "theme": "", "api-base": ""}},
+    {"tag": "linked-claims-feed", "src": "https://live.linkedtrust.us/claims-feed.js", "what": "Claims about one subject", "signin": false, "contract": false, "attributes": {"subject": "", "api": "", "repo": "", "limit": "", "theme": ""}},
+    {"tag": "linked-claims-atproto", "src": "https://live.linkedtrust.us/atproto-claims.js", "what": "com.linkedclaims.claim records from AT Proto", "signin": false, "contract": false, "attributes": {"subject": "* = all", "repo": "DIDs", "api": "", "limit": "", "theme": "", "compact": ""}},
+    {"tag": "linked-claim-request", "src": "https://live.linkedtrust.us/claim-request.js", "what": "Ask someone for a recommendation", "signin": false, "contract": false, "attributes": {"subject": "", "subject-name": "", "requester-name": "", "aspect": "", "api-base": "", "theme": ""}},
+    {"tag": "linked-video-recorder", "src": "https://live.linkedtrust.us/video-recorder.js", "what": "Record a short video and upload it", "signin": false, "contract": false, "attributes": {"api-base": "", "max-duration": "", "video-url": ""}},
+
+    {"tag": "civic-actions-feed", "src": "https://action.cooperation.org/embed/feed.js", "what": "Civic Works actions", "signin": false, "contract": false, "attributes": {"org-slug": "", "type": "in_person | virtual", "count": "default 5, max 20", "theme": "auto | light | dark", "api-base": ""}},
+    {"tag": "simple-tip", "src": "https://demos.linkedtrust.us/simpletip/simpletip.js", "what": "Tip a person", "signin": false, "contract": false, "attributes": {}},
+    {"tag": "tip-wallet", "src": "https://demos.linkedtrust.us/tippingwallet/tip-wallet.js", "what": "Interledger tipping", "signin": false, "contract": false, "attributes": {}}
+  ]
+}

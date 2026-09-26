@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Baobab components</title>
+<meta name="robots" content="noindex">
+<style>
+  :root {
+    --bb-bg: #faf9f6; --bb-surface: #fffefb; --bb-ink: #26221c; --bb-ink-2: #5d574d;
+    --bb-muted: #8a8378; --bb-border: #e6e1d8; --bb-accent: #007fa3;
+    --bb-font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --bb-font-head: Charter, "Bitstream Charter", "Iowan Old Style", Georgia, serif;
+    --bb-font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bb-bg); color: var(--bb-ink); font: 15px/1.5 var(--bb-font-body); }
+  a { color: var(--bb-accent); }
+  header, main { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+  header { padding-top: 32px; padding-bottom: 8px; }
+  h1 { font: 600 26px/1.2 var(--bb-font-head); margin: 0 0 6px; }
+  header p { margin: 0; color: var(--bb-ink-2); }
+  nav.toc { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 16px 0 0; font-size: 14px; }
+  section.c { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; padding: 28px 0; border-top: 1px solid var(--bb-border); }
+  section.c:first-of-type { border-top: 0; }
+  h2 { font: 600 19px/1.3 var(--bb-font-head); margin: 0 0 4px; }
+  h2 code { font: inherit; }
+  .what { margin: 0 0 12px; color: var(--bb-ink-2); }
+  dl { margin: 0 0 12px; font-size: 13.5px; display: grid; grid-template-columns: max-content 1fr; gap: 4px 12px; }
+  dt { font-family: var(--bb-font-mono); font-size: 12.5px; color: var(--bb-ink); }
+  dd { margin: 0; color: var(--bb-ink-2); }
+  .snippet { position: relative; }
+  pre { margin: 0; padding: 12px 14px; background: var(--bb-surface); border: 1px solid var(--bb-border); border-radius: 8px; font: 12.5px/1.5 var(--bb-font-mono); overflow-x: auto; white-space: pre; }
+  .copy { position: absolute; top: 6px; right: 6px; font: inherit; font-size: 12px; color: var(--bb-ink-2); background: var(--bb-bg); border: 1px solid var(--bb-border); border-radius: 6px; padding: 2px 8px; cursor: pointer; }
+  .live { background: var(--bb-surface); border: 1px solid var(--bb-border); border-radius: 10px; padding: 16px 18px; min-height: 60px; }
+  .live-label { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--bb-muted); margin: 0 0 8px; }
+  .more { padding: 28px 0 48px; border-top: 1px solid var(--bb-border); color: var(--bb-ink-2); }
+  @media (max-width: 760px) { section.c { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Baobab components</h1>
+  <p>Cards you can drop into any page: one script tag and one element. Each one below is running live.</p>
+  <nav class="toc" aria-label="Components">
+    <a href="#lt-claims">lt-claims</a>
+    <a href="#atproto-thread">atproto-thread</a>
+    <a href="#atproto-feed">atproto-feed</a>
+    <a href="#linked-badge">linked-badge</a>
+  </nav>
+</header>
+<main>
+
+<section class="c" id="lt-claims">
+  <div>
+    <h2><code>&lt;lt-claims&gt;</code></h2>
+    <p class="what">Recent LinkedTrust claims, filtered, checked again every minute.</p>
+    <dl>
+      <dt>data-up</dt><dd>The LinkedTrust server</dd>
+      <dt>data-query</dt><dd>Text to match</dd>
+      <dt>data-filter</dt><dd><code>ratings</code> or <code>credentials</code></dd>
+      <dt>data-subject</dt><dd>Claims about exactly this URL</dd>
+      <dt>data-claim</dt><dd>Claim type, e.g. <code>ENDORSES</code></dd>
+      <dt>data-issuer</dt><dd>Who made the claim</dd>
+      <dt>data-limit</dt><dd>How many (10)</dd>
+      <dt>data-refresh</dt><dd>Seconds between checks (60; 0 = never)</dd>
+    </dl>
+    <div class="snippet"><pre>&lt;script src="https://demos.linkedtrust.us/baobab/components/lt-claims.js" defer&gt;&lt;/script&gt;
+&lt;lt-claims data-up="https://live.linkedtrust.us"
+           data-filter="ratings" data-limit="4"&gt;&lt;/lt-claims&gt;</pre><button class="copy" type="button">Copy</button></div>
+  </div>
+  <div class="live"><p class="live-label">Live: ratings</p>
+    <lt-claims data-up="https://live.linkedtrust.us" data-filter="ratings" data-limit="4"></lt-claims>
+  </div>
+</section>
+
+<section class="c" id="atproto-thread">
+  <div>
+    <h2><code>&lt;atproto-thread&gt;</code></h2>
+    <p class="what">Comments on your page, made by replying to a Bluesky post. Replies show here within a minute. Nothing is stored anywhere but Bluesky.</p>
+    <dl>
+      <dt>data-up</dt><dd>An AT Proto app view</dd>
+      <dt>data-post</dt><dd>The post: a bsky.app link or an <code>at://</code> URI</dd>
+      <dt>data-depth</dt><dd>Reply levels (3)</dd>
+      <dt>data-refresh</dt><dd>Seconds between checks (60)</dd>
+    </dl>
+    <div class="snippet"><pre>&lt;script src="https://demos.linkedtrust.us/baobab/components/atproto-thread.js" defer&gt;&lt;/script&gt;
+&lt;atproto-thread data-up="https://public.api.bsky.app"
+  data-post="at://did:plc:xztctnvt5ycnsippd3orwqk7/app.bsky.feed.post/3mhysbqcas62w"&gt;&lt;/atproto-thread&gt;</pre><button class="copy" type="button">Copy</button></div>
+  </div>
+  <div class="live"><p class="live-label">Live: replies to a linkedclaims.com post</p>
+    <atproto-thread data-up="https://public.api.bsky.app" data-post="at://did:plc:xztctnvt5ycnsippd3orwqk7/app.bsky.feed.post/3mhysbqcas62w"></atproto-thread>
+  </div>
+</section>
+
+<section class="c" id="atproto-feed">
+  <div>
+    <h2><code>&lt;atproto-feed&gt;</code></h2>
+    <p class="what">The latest posts from one Bluesky account.</p>
+    <dl>
+      <dt>data-up</dt><dd>An AT Proto app view</dd>
+      <dt>data-actor</dt><dd>Handle or DID</dd>
+      <dt>data-limit</dt><dd>How many (5)</dd>
+      <dt>data-replies</dt><dd><code>yes</code> to include replies</dd>
+      <dt>data-refresh</dt><dd>Seconds between checks (120)</dd>
+    </dl>
+    <div class="snippet"><pre>&lt;script src="https://demos.linkedtrust.us/baobab/components/atproto-feed.js" defer&gt;&lt;/script&gt;
+&lt;atproto-feed data-up="https://public.api.bsky.app"
+              data-actor="linkedtrust.us" data-limit="3"&gt;&lt;/atproto-feed&gt;</pre><button class="copy" type="button">Copy</button></div>
+  </div>
+  <div class="live"><p class="live-label">Live: linkedtrust.us</p>
+    <atproto-feed data-up="https://public.api.bsky.app" data-actor="linkedtrust.us" data-limit="3"></atproto-feed>
+  </div>
+</section>
+
+<section class="c" id="linked-badge">
+  <div>
+    <h2><code>&lt;linked-badge&gt;</code></h2>
+    <p class="what">One verified claim as a badge. Used for testimonials on linkedtrust.us. Older style: its own shadow DOM, and a host attribute instead of <code>data-up</code>.</p>
+    <dl>
+      <dt>claim-id</dt><dd>The claim</dd>
+      <dt>layout</dt><dd>Badge layout</dd>
+      <dt>theme</dt><dd>Colors</dd>
+      <dt>api-base</dt><dd>The LinkedTrust server</dd>
+    </dl>
+    <div class="snippet"><pre>&lt;script src="https://live.linkedtrust.us/badge.js" defer&gt;&lt;/script&gt;
+&lt;linked-badge claim-id="124448"&gt;&lt;/linked-badge&gt;</pre><button class="copy" type="button">Copy</button></div>
+  </div>
+  <div class="live"><p class="live-label">Live: claim 124448</p>
+    <linked-badge claim-id="124448"></linked-badge>
+  </div>
+</section>
+
+<p class="more">Every component the team has, including the dashboard ones that need a sign-in
+(GovKit, amebo, CRM): <a href="https://github.com/Cooperation-org/baobab/blob/main/COMPONENTS.md">COMPONENTS.md</a>.
+The same list for code and agents: <a href="components.json">components.json</a>.</p>
+
+</main>
+<script src="lt-claims.js" defer></script>
+<script src="atproto-thread.js" defer></script>
+<script src="atproto-feed.js" defer></script>
+<script src="https://live.linkedtrust.us/badge.js" defer></script>
+<script src="gallery.js" defer></script>
+</body>
+</html>

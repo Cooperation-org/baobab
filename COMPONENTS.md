@@ -1,11 +1,24 @@
 # Components
 
 Every web component the team has, and where to load it from. Before building a card,
-look here: it may exist. When you ship one, add a row.
+look here: it may exist. When you ship one, add a row here and in
+[components/components.json](components/components.json) (the same list, for code and agents).
+
+**See them running: https://demos.linkedtrust.us/baobab/components/**
 
 Checked 2026-09-26 by searching every repo for `customElements.define`. "Contract" says
 whether it follows CONTRACT.md section 2 (vanilla, no shadow DOM, `data-up`, textContent
 only, hides when empty).
+
+## Library (this repo, `components/`, no sign-in needed)
+
+Load from `https://demos.linkedtrust.us/baobab/components/<file>`.
+
+| Tag | What | Attributes | Contract |
+|---|---|---|---|
+| `<lt-claims>` | Recent LinkedTrust claims, filtered, checked again every minute | `data-up`, `data-query`, `data-filter` (ratings, credentials), `data-subject`, `data-claim`, `data-issuer`, `data-limit`, `data-refresh` | yes |
+| `<atproto-thread>` | Comments on a page, made by replying to a Bluesky post; replies show within a minute; stored only on Bluesky | `data-up` (an app view, e.g. `https://public.api.bsky.app`), `data-post`, `data-depth`, `data-refresh` | yes |
+| `<atproto-feed>` | Latest posts from one Bluesky account | `data-up`, `data-actor`, `data-limit`, `data-replies`, `data-refresh` | yes |
 
 ## Dashboard pieces
 
@@ -82,12 +95,12 @@ work as embeds today.
 
 ## Wanted, not built
 
-- **Live claims feed with filters.** The backend filters today: `GET /api/feed` (`query`,
-  `filter=ratings|credentials`, `page`, `limit`) and `GET /api/claim` (`subject`, `object`,
-  `claim` type, `issuer_id`). No date filter, and nothing pushes new claims to a browser.
-- **AT Proto comments on any page.** Exists only inside the LinkedTrust blog's Ghost fork
-  (Cooperation-org/Zombie, branch `bluesky-integration`, `ghost/core/core/server/services/`):
-  a comment posts as a Bluesky reply under the post the article is linked to (as the
-  commenter with Bluesky sign-in, else as the blog's account), and replies made on Bluesky
-  come back every 2 minutes. It uses Ghost's comments box and Ghost's database; a card for
-  other pages needs its own small backend.
+- **Claims pushed the moment they are made.** `<lt-claims>` checks on a timer, because
+  LinkedTrust has no push to browsers, and adding one means changing its production backend.
+  It has no date filter for the same reason.
+- **Commenting from the page itself.** `<atproto-thread>` sends people to Bluesky to reply.
+  Posting from the page needs Bluesky sign-in in the browser, or a small service like the
+  blog's Ghost fork has (Cooperation-org/Zombie, branch `bluesky-integration`, which posts
+  as the commenter or as the blog's account).
+- `<civic-actions-feed>` cannot be used from other sites: `action.cooperation.org/feed.json`
+  sends no CORS header (checked 2026-09-26).
