@@ -101,7 +101,10 @@ Each element from PRINCIPLES.md, as rules you can check in a diff.
 ## Components
 
 - Before building a card, check [COMPONENTS.md](COMPONENTS.md). Mount what exists.
-- When you ship a card, add its row there in the same commit.
+- When you ship a card, add its row to baobab's COMPONENTS.md and components/components.json
+  (commit to the baobab repo, even when the card lives in another repo).
+- A frond and its root use the same slug.
+- A card that shows nothing: CONTRACT.md section 13.
 - Write what did not fit, or what you had to guess, in [SCRATCH.md](SCRATCH.md).
 
 ## Stop and ask before

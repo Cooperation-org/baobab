@@ -62,6 +62,8 @@ A frond ships `embed/<slug>.js`: one file of vanilla custom elements.
 - A card that changes something dispatches `<slug>:changed` on `document`, with
   `{detail: {type, id}}`.
 - Each card has one expand link into the full app (section 4).
+- A card that lists things takes `data-limit` for how many, and its API takes `?limit=`
+  (latest first).
 
 These rules are the existing contract (`govkit/docs/COMPOSITION.md`, "Mount"), which
 govkit.js, amebo.js and crm-reachout already follow. New: the write header, the
@@ -219,6 +221,20 @@ writing it again.
    `template/frond/public/embed/kit.js`, following section 2. Whoever runs the frame adds
    the app to its Peers (admin) and its card to a `dashboards/*.json`.
 5. **Links:** a "Links" section in its README (section 4).
+
+## 13. When a card shows nothing
+
+A card hides on any failure, so a misconfiguration looks the same as "nothing yet". Check,
+in order, in the browser's network tab on the dashboard page:
+
+1. The card's script loaded (not blocked by the page's `Content-Security-Policy`: its origin
+   must be a peer's).
+2. Its API call answered 200, not 401 (the person has not signed in to that piece yet), 403
+   (not a member of the org), or a CORS error (the page's origin is missing from that
+   piece's `EMBED_ORIGINS`, which must list origins exactly: scheme, host, port).
+3. The answer has rows.
+
+The frame's log says why a card was left out of a dashboard.
 
 ## Open decisions
 

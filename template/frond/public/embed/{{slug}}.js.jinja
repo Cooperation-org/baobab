@@ -1,8 +1,8 @@
 // {{ name }} cards. Vanilla custom elements: no framework, no build step, no
 // shadow DOM. Style them from the host page by tag name.
 //
-//   <{{ slug }}-items data-up="<API_URL>" data-org="<org slug>" data-app="<app URL>">
-//     The org's items, one per row, and a link into the app. Hides itself when
+//   <{{ slug }}-items data-up="<API_URL>" data-org="<org slug>" data-app="<app URL>" data-limit="5">
+//     The org's latest items (data-limit, default 5), one per row, and a link into the app. Hides itself when
 //     there is nothing to show. Refreshes on live messages for <org>/items.
 
 (function () {
@@ -28,7 +28,8 @@
       connectedCallback() {
         var org = this.dataset.org;
         if (!org) return kit.hide(this);
-        this.path = '/api/orgs/' + encodeURIComponent(org) + '/items/';
+        this.path = '/api/orgs/' + encodeURIComponent(org) + '/items/?limit=' +
+          encodeURIComponent(this.dataset.limit || '5');
         this.load();
         this.stop = kit.live(this, [org + '/items'], this.load.bind(this));
       }

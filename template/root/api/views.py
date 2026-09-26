@@ -38,7 +38,9 @@ class ItemsView(generics.ListCreateAPIView):
     permission_classes = [IsOrgMember]
 
     def get_queryset(self):
-        return Item.objects.filter(org=self.kwargs["org"])
+        items = Item.objects.filter(org=self.kwargs["org"])
+        limit = self.request.query_params.get("limit", "")
+        return items[: min(int(limit), 100)] if limit.isdigit() and int(limit) > 0 else items
 
     def perform_create(self, serializer):
         item = serializer.save(org=self.kwargs["org"], created_by=self.request.user)

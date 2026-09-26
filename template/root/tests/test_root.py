@@ -56,3 +56,12 @@ def test_membership_is_asked_of_the_frame(person):
     assert req.full_url == "https://frame.example/api/s2s/membership/?sub=42&org=acme"
     assert req.headers["Authorization"] == "Bearer t0k"
     assert call.call_count == 1
+
+
+def test_limit_gives_the_latest(client, person):
+    client.force_login(person)
+    for n in range(7):
+        Item.objects.create(org="acme", title=f"t{n}", created_by=person)
+    with patch("api.security.member_role", return_value="member"):
+        got = client.get(URL + "?limit=5").json()
+    assert [i["title"] for i in got] == ["t6", "t5", "t4", "t3", "t2"]
