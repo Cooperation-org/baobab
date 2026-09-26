@@ -2,7 +2,7 @@
 
 Templates for apps that compose into one dashboard, and work on their own.
 
-**Read first: [PRINCIPLES.md](PRINCIPLES.md).** Agents: [AGENTS.md](AGENTS.md).
+**Read first: [PRINCIPLES.md](PRINCIPLES.md).** Agents: [AGENTS.md](AGENTS.md). Components that exist: [COMPONENTS.md](COMPONENTS.md). Problems and asks: [SCRATCH.md](SCRATCH.md).
 
 Status: first version, 2026-09-26. Templates render, build and pass their tests; see "What is not done yet" in CONTRACT.md.
 

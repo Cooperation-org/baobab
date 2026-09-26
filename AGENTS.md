@@ -93,6 +93,12 @@ Each element from PRINCIPLES.md, as rules you can check in a diff.
   section 10), needs the project owner's OK. A piece's own settings, prefixed with its slug,
   do not.
 
+## Components
+
+- Before building a card, check [COMPONENTS.md](COMPONENTS.md). Mount what exists.
+- When you ship a card, add its row there in the same commit.
+- Write what did not fit, or what you had to guess, in [SCRATCH.md](SCRATCH.md).
+
 ## Stop and ask before
 
 - A new kind, a new setting name, a new cross-piece protocol.
