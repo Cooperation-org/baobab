@@ -4,7 +4,7 @@
 {% block content %}
 <baobab-grid data-up="{{ request.scheme }}://{{ request.get_host }}" data-dashboard="{{ dashboard }}">
   {% for c in cards %}
-  <section class="card" data-card="{{ c.id }}" data-w="{{ c.w }}">
+  <section class="card" data-card="{{ c.id }}" data-w="{{ c.w }}"{% if c.peer %} data-autohide{% endif %}>
     <div class="card-header">
       <span class="card-title">{{ c.title }}</span>
     </div>

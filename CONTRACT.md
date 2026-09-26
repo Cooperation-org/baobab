@@ -225,12 +225,14 @@ regenerated:
 
 Verified 2026-09-26 against the templates as they are.
 
-- Live updates have not run end to end against Postgres. The code is in `live.py`; the
-  tests cover only the refusal of topics outside a person's orgs.
-- `<baobab-nav>` has no sign-out control. Sign-out is `POST /auth/logout/` on the frame.
+- Live updates (cards refetching when data changes, `/api/live/`) have not run end to end
+  against Postgres. The code is in `live.py`; the tests cover only the refusal of topics
+  outside a person's orgs.
+- Signing out of the frame does not sign out of LinkedTrust (it has no sign-out endpoint),
+  so the next sign-in is one click.
 - `AUTH_PROVIDERS` values other than `linkedtrust` show no button yet (Open decision B).
-- Cards over a vine that only takes bearer tokens (Open decision A).
-- The frond template ships no `package-lock.json`; versions float within the ranges in
-  `package.json`.
+- Cards over a vine that only takes bearer tokens (Open decision A). Working example to
+  copy: `<govkit-tasks>` on the workers.vc dash reads Taiga through GovKit, server-side, with
+  an application token (`govkit/apps/tasksources/adapters.py`), and saves drag order back.
 - GovKit and workers.vc are not made from these templates. GovKit's `grid.js` is the same
   element on GovKit's own API (`/api/v1/accounts/me/layouts/`, header `X-Govkit-Embed`).

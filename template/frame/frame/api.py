@@ -6,6 +6,7 @@ import logging
 
 from asgiref.sync import sync_to_async
 from django.conf import settings
+from django.contrib.auth import logout
 from django.http import HttpResponse, JsonResponse, StreamingHttpResponse
 from django.urls import path
 from django.views.decorators.http import require_GET
@@ -81,6 +82,14 @@ class NavView(APIView):
         })
 
 
+class LogoutView(APIView):
+    """Sign out of this frame. Called from <baobab-nav> on any page, with X-Baobab."""
+
+    def post(self, request):
+        logout(request)
+        return Response(status=204)
+
+
 @require_GET
 def s2s_membership(request):
     """For roots: is this person (OIDC sub) in this org, and as what?"""
@@ -129,6 +138,7 @@ urls = [
     path("me/", MeView.as_view()),
     path("me/layouts/<slug:dashboard>/", LayoutView.as_view()),
     path("nav/", NavView.as_view()),
+    path("logout/", LogoutView.as_view()),
     path("s2s/membership/", s2s_membership),
     path("s2s/orgs/", s2s_orgs),
     path("live/", live_view),

@@ -32,7 +32,14 @@
       'baobab-nav a[aria-current="page"] { color: var(--bb-ink, #26221c); font-weight: 600; }',
       'baobab-nav .bn-site { font-weight: 650; color: var(--bb-ink, #26221c); padding-left: 0; }',
       'baobab-nav .bn-spacer { flex: 1; }',
-      'baobab-nav .bn-me { color: var(--bb-muted, #8a8378); padding: 6px 4px; white-space: nowrap; }',
+      'baobab-nav .bn-bar { overflow-y: visible; }',
+      'baobab-nav .bn-account { position: relative; }',
+      'baobab-nav .bn-me { font: inherit; color: var(--bb-ink-2, #5d574d); background: none; border: 0; padding: 6px 10px; border-radius: 6px; cursor: pointer; white-space: nowrap; }',
+      'baobab-nav .bn-me:hover { background: rgba(127,127,127,0.1); }',
+      'baobab-nav .bn-menu { position: fixed; right: 12px; top: 40px; z-index: 50; min-width: 9rem; padding: 4px 0; background: var(--bb-surface, #fffefb); border: 1px solid var(--bb-border, #e6e1d8); border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); }',
+      'baobab-nav .bn-menu[hidden] { display: none; }',
+      'baobab-nav .bn-menu button { display: block; width: 100%; text-align: left; font: inherit; color: var(--bb-ink, #26221c); background: none; border: 0; padding: 8px 12px; cursor: pointer; }',
+      'baobab-nav .bn-menu button:hover { background: rgba(127,127,127,0.1); }',
     ].join('\n');
     document.head.appendChild(s);
   }
@@ -59,7 +66,7 @@
       if (this._started) return;
       this._started = true;
       ensureStyles();
-      var up = (this.dataset.up || FRAME).replace(/\/$/, '');
+      var up = this.up = (this.dataset.up || FRAME).replace(/\/$/, '');
       var self = this;
       if (!up) return;
       fetch(up + '/api/nav/', { credentials: 'include' })
@@ -82,15 +89,50 @@
       spacer.className = 'bn-spacer';
       bar.appendChild(spacer);
       if (nav.me) {
-        var me = document.createElement('span');
-        me.className = 'bn-me';
-        me.textContent = nav.me.name;
-        bar.appendChild(me);
-      } else {
+        bar.appendChild(this.account(nav.me.name, nav.site.url));
+      } else if (location.href !== nav.site.url) {
+        // The frame's front page carries its own Sign in; say it once.
         bar.appendChild(link(nav.login_url + '?next=' + encodeURIComponent(location.href), 'Sign in'));
       }
       this.textContent = '';
       this.appendChild(bar);
+    }
+
+    // The person's name opens a menu with Sign out. Signing out ends the session on
+    // this frame and lands on its front page; the sign-in provider keeps its own
+    // session, so signing back in is one click.
+    account(name, home) {
+      var up = this.up;
+      var wrap = document.createElement('span');
+      wrap.className = 'bn-account';
+      var toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.className = 'bn-me';
+      toggle.textContent = name;
+      toggle.setAttribute('aria-haspopup', 'true');
+      toggle.setAttribute('aria-expanded', 'false');
+      var menu = document.createElement('div');
+      menu.className = 'bn-menu';
+      menu.hidden = true;
+      var out = document.createElement('button');
+      out.type = 'button';
+      out.textContent = 'Sign out';
+      out.addEventListener('click', function () {
+        fetch(up + '/api/logout/', { method: 'POST', credentials: 'include', headers: { 'X-Baobab': '1' } })
+          .then(function () { location.assign(home); });
+      });
+      menu.appendChild(out);
+      toggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        menu.hidden = !menu.hidden;
+        toggle.setAttribute('aria-expanded', String(!menu.hidden));
+      });
+      document.addEventListener('click', function () {
+        menu.hidden = true;
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+      wrap.append(toggle, menu);
+      return wrap;
     }
   }
 

@@ -108,3 +108,10 @@ def test_after_sign_in_only_known_places(rf):
     assert safe_next(req, "/o/acme/") == "/o/acme/"
     assert safe_next(req, "https://planner.example/items") == "https://planner.example/items"
     assert safe_next(req, "https://evil.example/") == "/"
+
+
+def test_sign_out_from_the_nav(client, member):
+    client.force_login(member)
+    assert client.get("/api/nav/").json()["me"]
+    assert client.post("/api/logout/", **EMBED).status_code == 204
+    assert client.get("/api/nav/").json()["me"] is None

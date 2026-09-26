@@ -294,13 +294,25 @@
     // not hidden by the person.
     shouldShow(c) {
       return c.node.isConnected && c.node.parentNode === c.content && !c.node.hidden
-        && this.saved.hidden.indexOf(c.id) === -1;
+        && this.saved.hidden.indexOf(c.id) === -1 && !this.empty(c);
+    }
+
+    // A card marked data-autohide leaves the grid while everything in it besides its
+    // heading is hidden or empty (a peer's card that has nothing for this person).
+    empty(c) {
+      if (!c.node.hasAttribute('data-autohide')) return false;
+      var parts = Array.prototype.filter.call(c.node.children, function (n) {
+        return !n.classList.contains('card-header');
+      });
+      return parts.every(function (n) { return n.hidden || !n.childNodes.length; });
     }
 
     watch(c) {
       var self = this;
       var sync = function () { self.syncCard(c); };
-      new MutationObserver(sync).observe(c.node, { attributes: true, attributeFilter: ['hidden'] });
+      new MutationObserver(sync).observe(c.node, {
+        attributes: true, attributeFilter: ['hidden'], childList: true, subtree: true,
+      });
       new MutationObserver(sync).observe(c.content, { childList: true });
       if (window.ResizeObserver) {
         new ResizeObserver(function () {
