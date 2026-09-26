@@ -141,8 +141,31 @@ def test_dashboard_cards_own_script_and_requires(client, member, settings, tmp_p
     client.force_login(member)
     body = client.get("/o/acme/").content.decode()
     assert "<h1 class=\"dash-title\">Volunteer Dashboard</h1>" in body
-    assert '<acme-mine data-up="http://testserver" data-org="acme"></acme-mine>' in body
+    assert '<acme-mine data-org="acme" data-up="http://testserver"></acme-mine>' in body
     assert "/static/embed/acme.js" in body
     assert 'data-card="cases"' not in body
     settings.CASES_URL = "https://cases.example"
     assert 'data-card="cases"' in client.get("/o/acme/").content.decode()
+
+
+def test_library_cards_with_attributes_only_from_a_peer_origin(client, member, tmp_path, monkeypatch, caplog):
+    import json
+
+    from frame import views
+
+    lib = "https://demos.linkedtrust.us/baobab/components/"
+    (tmp_path / "home.json").write_text(json.dumps({"title": "Home", "cards": [
+        {"id": "claims", "tag": "lt-claims", "script": lib + "lt-claims.js",
+         "attrs": {"data-up": "https://live.linkedtrust.us", "data-query": "elmwood"}},
+        {"id": "bad", "tag": "evil-card", "script": "https://evil.example/x.js"},
+    ]}))
+    monkeypatch.setattr(views, "DASHBOARDS", tmp_path)
+    client.force_login(member)
+    body = client.get("/o/acme/").content.decode()
+    assert 'data-card="claims"' not in body
+    assert "not a peer's origin" in caplog.text
+    Peer.objects.create(slug="lib", name="Components", app_url=lib, api_url=lib, embed_url=lib + "lt-claims.js")
+    body = client.get("/o/acme/").content.decode()
+    assert '<lt-claims data-org="acme" data-query="elmwood" data-up="https://live.linkedtrust.us"></lt-claims>' in body
+    assert lib + "lt-claims.js" in body
+    assert "evil" not in body
