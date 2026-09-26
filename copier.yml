@@ -1,0 +1,32 @@
+_min_copier_version: "9.0"
+_subdirectory: "template/{{ kind }}"
+_templates_suffix: .jinja
+_answers_file: .copier-answers.yml
+
+kind:
+  type: str
+  help: What are you building?
+  choices:
+    "frame: where people land (sign-in, orgs, nav, dashboards)": frame
+    "frond: a front end for one job, with cards": frond
+    "root: a new backend for a frond": root
+
+slug:
+  type: str
+  help: Short name, lowercase, e.g. planner
+  validator: >-
+    {% if not (slug | regex_search('^[a-z][a-z0-9-]{1,30}$')) %}lowercase letters, digits and hyphens, starting with a letter{% endif %}
+
+name:
+  type: str
+  help: Name people see
+  default: "{{ slug | replace('-', ' ') | title }}"
+
+backend:
+  type: str
+  help: Where does this frond's data live?
+  when: "{{ kind == 'frond' }}"
+  choices:
+    "a new root (Django API made from this template)": root
+    "an existing system (Taiga, Odoo, anything with OIDC and an API): a vine": vine
+  default: root

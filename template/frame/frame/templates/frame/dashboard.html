@@ -1,0 +1,21 @@
+{% extends "frame/base.html" %}
+{% load static frame_tags %}
+{% block title %}{{ title }} · {{ org.name }}{% endblock %}
+{% block content %}
+<baobab-grid data-up="{{ request.scheme }}://{{ request.get_host }}" data-dashboard="{{ dashboard }}">
+  {% for c in cards %}
+  <section class="card" data-card="{{ c.id }}" data-w="{{ c.w }}">
+    <div class="card-header">
+      <span class="card-title">{{ c.title }}</span>
+      {% if c.peer %}<a class="card-app" href="{{ c.peer.app_url }}">{{ c.peer.name }}</a>{% endif %}
+    </div>
+    {% if c.template %}{% include c.template %}{% else %}{% peer_card c org %}{% endif %}
+  </section>
+  {% endfor %}
+</baobab-grid>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'embed/grid.js' %}" defer></script>
+{% for s in scripts %}<script src="{{ s }}" defer></script>
+{% endfor %}
+{% endblock %}
