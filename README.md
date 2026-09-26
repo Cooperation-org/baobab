@@ -16,6 +16,10 @@ Status: first version, 2026-09-26. Templates render, build and pass their tests;
 
 A frond on a system that already exists (Taiga, Odoo, anything with OIDC and an API) needs
 no new backend: pick **frond** and answer "existing system". That connection is a **vine**.
+Its cards can read the system straight from the page only if the system accepts the
+browser's session from the dashboard's site (Odoo on the same domain does). If it takes only
+a token (Taiga), the cards read it through a small connector on the server, in the frame or
+a root (CONTRACT.md section 2, "Where a card reads from").
 
 **An app that already exists and has its own pages** (Chiku, Elm, a Django app with its own
 users) is not generated. It joins by the steps in

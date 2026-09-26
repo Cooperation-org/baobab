@@ -109,6 +109,9 @@ Each element from PRINCIPLES.md, as rules you can check in a diff.
 
 ## Stop and ask before
 
+- Anything CONTRACT.md, SCRATCH.md or a docstring marks as the project owner's call. Do not
+  pick one of the options and flag it; ask, and wait.
+
 - A new kind, a new setting name, a new cross-piece protocol.
 - Anything that makes one piece require another to be running.
 - A frame table not listed in CONTRACT.md section 8.
