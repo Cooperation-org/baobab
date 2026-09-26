@@ -17,6 +17,10 @@ Status: first version, 2026-09-26. Templates render, build and pass their tests;
 A frond on a system that already exists (Taiga, Odoo, anything with OIDC and an API) needs
 no new backend: pick **frond** and answer "existing system". That connection is a **vine**.
 
+**An app that already exists and has its own pages** (Chiku, Elm, a Django app with its own
+users) is not generated. It joins by the steps in
+[CONTRACT.md section 12](CONTRACT.md#12-bringing-an-existing-app-in).
+
 ```
 uvx copier copy --trust gh:Cooperation-org/baobab my-app
 ```

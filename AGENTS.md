@@ -68,6 +68,11 @@ Each element from PRINCIPLES.md, as rules you can check in a diff.
 - A card never shows a sensitive record; a root never caches sensitive data.
 - Log refusals server-side.
 
+## Accounts
+
+- Never link a sign-in to an existing account by email unless the provider marks the email
+  verified and exactly one account matches (templates: `person_for` in `auth.py`).
+
 ## A card with nothing to show hides
 
 - Any non-200, bad payload, or empty list: `this.hidden = true` and return.
@@ -87,8 +92,8 @@ Each element from PRINCIPLES.md, as rules you can check in a diff.
 
 ## One question at the top
 
-- The generator asks the kind first. Every other question has a default a person can
-  accept by pressing Enter.
+- The generator asks the kind first, then a short name. Every other question has a default
+  a person can accept by pressing Enter.
 - Adding a generator question, or a name to the shared settings table (CONTRACT.md
   section 10), needs the project owner's OK. A piece's own settings, prefixed with its slug,
   do not.

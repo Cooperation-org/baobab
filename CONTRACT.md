@@ -31,7 +31,11 @@ server-side in a root or in the frame; see Open decision A.
   `/oauth/authorize` and that session exists, the provider redirects straight back without
   a login page (`oidcApi.ts:137-155`). So each piece runs its own OIDC login, and the
   person sees one sign-in.
-- Frame and root: `django-linkedtrust-auth` (Cooperation-org, v1.2.0).
+- Frame and root: `django-linkedtrust-auth` (Cooperation-org, v1.2.0) for the redirect and
+  code exchange; the templates' `person_for` decides the account. It links a sign-in to an
+  existing account only when the provider marks the email verified, exactly one account has
+  it, and that account has no id from this provider yet. Anything looser lets whoever holds
+  a matching email take over an account.
 - Frond on a root: the root does the sign-in; the frond app sends the person to the root's
   login and uses the root's session cookie.
 - Frond on a vine: the system does the sign-in through its own OIDC support (Taiga:
@@ -84,9 +88,11 @@ a dashboard runs in the same page and could read it.
 
 ### Sensitive data
 
-- A card never carries a sensitive record. A system with sensitive data may ship cards
-  that show counts or the person's own items; the records stay on its own pages.
-- Those pages are fixed pages, not grid pages, and load no other piece's card scripts.
+- A card never carries a sensitive record, not even one of the person's own. A system with
+  sensitive data may ship cards that show counts, or items that are not sensitive; the
+  records stay on its own pages.
+- Those pages are fixed pages, not grid pages, and load no script from another piece,
+  including the nav. They link to the frame instead.
 - A root never caches sensitive data.
 
 ## 3. Live updates
@@ -196,13 +202,23 @@ split across domains is not supported yet.
 
 ## 12. Bringing an existing app in
 
-An app that was not generated (Chiku, Elm) joins by meeting the contract, not by being
-regenerated:
+An app that was not generated (Chiku, Elm, a Django app with its own users) joins by
+meeting the contract, not by being regenerated. Copy code from the templates rather than
+writing it again.
 
-1. `NAV_SRC`/`NAV_TAG` and `THEME_CSS` (sections 6, 7).
-2. A "Links" section in its README (section 4).
-3. If it offers cards: `embed/<slug>.js` following section 2, and a row in the frame's peers.
-4. Its sign-in through OIDC against `OIDC_ISSUER` (section 1).
+1. **Sign-in** through OIDC against `OIDC_ISSUER` (section 1). A Django app copies
+   `template/root/api/auth.py` and its `Identity` model, which link an existing account
+   only by a verified, unambiguous email. Existing password logins can stay until the
+   project owner says otherwise.
+2. **Permissions stay the app's own**, checked server-side on every request. If the app has
+   orgs that the frame also has, the org comes from the URL path and is checked with the
+   frame (template/root `api/security.py`).
+3. **Nav and theme:** the same setting names without the `VITE_` prefix: `NAV_SRC`,
+   `NAV_TAG`, `THEME_CSS`. Unset: the app keeps its own bar and look.
+4. **Cards:** `static/embed/<slug>.js`, starting from a copy of
+   `template/frond/public/embed/kit.js`, following section 2. Whoever runs the frame adds
+   the app to its Peers (admin) and its card to a `dashboards/*.json`.
+5. **Links:** a "Links" section in its README (section 4).
 
 ## Open decisions
 
