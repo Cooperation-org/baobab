@@ -1,0 +1,16 @@
+from django.contrib import admin
+from django.urls import path
+from linkedtrust_auth.views import RedirectView
+
+from api import auth, views
+
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("auth/login/", auth.login_page, name="login"),
+    path("auth/logout/", auth.logout_view, name="logout"),
+    path("auth/linkedtrust/redirect", RedirectView.as_view(), name="linkedtrust_start"),
+    path("auth/linkedtrust/callback", auth.Callback.as_view(), name="linkedtrust_callback"),
+    path("api/me/", views.MeView.as_view()),
+    path("api/orgs/<slug:org>/items/", views.ItemsView.as_view()),
+    path("api/live/", views.live_view),
+]

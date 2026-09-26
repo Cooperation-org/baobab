@@ -38,7 +38,7 @@ def login_page(request):
     error = request.GET.get("error", "")
     if settings.AUTH_PROVIDERS == ["linkedtrust"] and not error:
         return redirect("linkedtrust_start")
-    return render(request, "frame/login.html", {
+    return render(request, "api/login.html", {
         "providers": settings.AUTH_PROVIDERS,
         "error": error,
     })

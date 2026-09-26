@@ -1,0 +1,38 @@
+# {{ name }}
+
+A baobab root: the backend for a frond, holding data no existing system holds. Made
+from [Cooperation-org/baobab](https://github.com/Cooperation-org/baobab); the rules are its
+[PRINCIPLES](https://github.com/Cooperation-org/baobab/blob/main/PRINCIPLES.md),
+[AGENTS](https://github.com/Cooperation-org/baobab/blob/main/AGENTS.md) and
+[CONTRACT](https://github.com/Cooperation-org/baobab/blob/main/CONTRACT.md).
+
+`Item` in `api/models.py` is the example. Replace it with what this root owns.
+
+## Run it
+
+```
+uv venv && uv pip install -r requirements.txt
+cp .env.example .env          # DATABASE_URL, the OIDC client, FRAME_URL and S2S_TOKEN
+.venv/bin/python manage.py migrate
+.venv/bin/uvicorn config.asgi:application --port 8001
+.venv/bin/pytest
+```
+
+Production: `gunicorn config.asgi:application -k uvicorn.workers.UvicornWorker`.
+Live updates (`/api/live/`) need Postgres and an ASGI server.
+
+## What it serves
+
+| Path | What |
+|---|---|
+| `/auth/login/?next=` | Sign in, then back to `next` (a URL on an origin in `EMBED_ORIGINS`) |
+| `/api/me/` | The signed-in person |
+| `/api/orgs/<org>/items/` | GET the org's items, POST one (`X-Baobab: 1`) |
+| `/api/live/?topics=<org>/items` | Server-sent events: `{topic, type, id}` |
+
+Who is in which org is the frame's fact. Every org-scoped request asks the frame
+(`FRAME_URL/api/s2s/membership/`), cached for a minute.
+
+## Links
+
+`/api/orgs/<org>/items/`. Published link shapes never change (CONTRACT.md section 4).

@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ site_name }}{% endblock %}</title>
+<style>
+  body { margin: 0; padding: 40px 16px; background: #faf9f6; color: #26221c; font: 15px/1.5 system-ui, sans-serif; }
+  main { max-width: 28rem; margin: 0 auto; }
+  h1 { font: 600 22px/1.3 Charter, Georgia, serif; }
+  .btn { display: inline-block; color: #fff; background: #007fa3; border-radius: 6px; padding: 8px 16px; text-decoration: none; }
+  .note { color: #b03a44; }
+</style>
+</head>
+<body><main>{% block content %}{% endblock %}</main></body>
+</html>
