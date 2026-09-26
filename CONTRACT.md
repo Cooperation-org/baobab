@@ -180,7 +180,7 @@ owner's OK. A piece's own settings use its slug as prefix (`PLANNER_…`) and ne
 | `OIDC_CLIENT_ID`, `OIDC_CLIENT_SECRET` | none, required | all |
 | `AUTH_PROVIDERS` | `linkedtrust` | all |
 | `EMBED_ORIGINS` | none | frame, root, and a vine system that serves cards: origins allowed to fetch with credentials |
-| `LIVE` | `on` | frame, root |
+| `LIVE` | `true` | frame, root |
 | `NAV_SRC`, `NAV_TAG` | none, `baobab-nav` | frond |
 | `THEME_CSS` | none | frond |
 | `API_URL` | none, required | frond: its root or vine system |
@@ -207,7 +207,8 @@ regenerated:
 ## Open decisions
 
 - **A.** Cards over a vine system that only takes bearer tokens (Taiga). The connector runs
-  server-side in a root or the frame (today's GovKit way). Open: whether it reads as the
+  server-side in a root or the frame (today's GovKit way). A connector in a frame adds no
+  tables: it reads through, checks membership per request, and may cache for a stated time. Open: whether it reads as the
   signed-in person (exchanging their LinkedTrust login for a system token, as the Taiga
   plugin does at login) or as a service account that checks the person's rights itself.
   LinkedTrust access tokens are JWTs any service can verify from JWKS: issuer, subject,

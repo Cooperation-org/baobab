@@ -47,13 +47,24 @@ A dashboard is a file, `dashboards/<name>.json`:
   "roles": [],
   "cards": [
     {"id": "apps", "w": 12, "title": "Apps", "template": "frame/cards/apps.html"},
-    {"id": "items", "w": 6, "title": "Items", "peer": "planner", "tag": "planner-items"}
+    {"id": "items", "w": 6, "title": "Items", "peer": "planner", "tag": "planner-items"},
+    {"id": "mine", "w": 6, "title": "Mine", "tag": "{{ slug }}-mine", "script": "embed/{{ slug }}.js"},
+    {"id": "cases", "w": 6, "title": "Cases", "template": "frame/cards/cases.html", "requires": "CASES_URL"}
   ]
 }
 ```
 
 The default dashboard is one card, Apps: every peer, opening its app. `roles` empty: every
-member of the org. `w` is a width out of 12. A card is a template in
+member of the org. `title` is the page heading.
+
+A card is one of three things:
+
+- `template`: a template in this frame.
+- `tag` + `script`: this frame's own custom element, from its static files (start from
+  `static/embed/kit.js`). It gets `data-up` = this frame and `data-org`.
+- `tag` + `peer`: a peer's custom element, from the peer's cards file.
+
+`requires`: the card shows only while that setting is set (unset means off). `w` is a width out of 12. A card is a template in
 this frame, or a peer's custom element; the peer (its app, API and cards-file URLs) is a row
 under Peers in the admin, and its cards-file origin is the only outside script the page
 may load. Card order in the file is the default arrangement; each person's changes are
