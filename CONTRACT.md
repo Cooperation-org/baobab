@@ -128,7 +128,7 @@ redirects), Elm `/c/<campaignId>`, GovKit `/o/<org>/{pie,drops,votes,members,pro
 
 ## 6. Nav
 
-- The frame serves `/embed/nav.js`, one custom element. Its places (label, URL, which roles
+- The frame serves `/static/embed/nav.js`, one custom element, `<baobab-nav data-up="<frame>">`. Its places (label, URL, which roles
   see it) are frame data, edited in the frame, not concatenated from hostnames.
 - A frond reads `NAV_SRC` (script URL) and `NAV_TAG` (tag name). Set: it mounts that nav on
   top and drops its own top bar. Unset: its own minimal top bar.
@@ -137,7 +137,7 @@ redirects), Elm `/c/<campaignId>`, GovKit `/o/<org>/{pie,drops,votes,members,pro
 
 ## 7. Theme
 
-- The frame serves `/embed/theme.css`: CSS custom properties only, prefix `--bb-`.
+- The frame serves `/static/embed/theme.css`: CSS custom properties only, prefix `--bb-`.
 - A frond reads `THEME_CSS`; set, it loads that file after its own CSS, so the frame's values
   win. Its Tailwind theme maps to the same `--bb-` names.
 - The starting values are GovKit's (`govkit/static/govkit.css`, `--gk-*`).
@@ -150,9 +150,12 @@ The frame's tables are exactly these; anything else needs the project owner's OK
 |---|---|
 | people, orgs, members | who, which orgs, which role in each |
 | peers | each frond and root: `slug`, `app_url`, `api_url`, `embed_url` |
+| identities | the provider's id (`sub`) for each person |
 | nav places | label, URL, roles that see it |
-| dashboards | slug, roles that see it; its default layout is a file in the frame repo |
 | layouts | person, dashboard, layout JSON |
+
+A dashboard is not a table: it is a file in the frame repo, `dashboards/<name>.json`, with
+the roles that see it and its cards in default order.
 
 The frame hands `api_url` to cards as `data-up`, `embed_url` becomes the card script, and
 `app_url` is the expand link base.
@@ -213,6 +216,7 @@ regenerated:
   (`/sso/<clientId>`, `oidcApi.ts:145-150`), but the client record has no list of providers
   (`trust_claim_backend/prisma/schema.prisma:334-345`). Showing only chosen providers
   means either a field on that record, or the app's own buttons.
-- **C.** How a root learns orgs and roles. Proposed: the frame owns them and serves
-  `GET /api/me/` (the person's orgs and roles); a root reads it server-to-server. Later, the
-  LinkedTrust `trust` claim (`earnkit/docs/SSO-AND-TEAMS.md`, section 2).
+- **C.** How a root learns orgs and roles. Built in the templates: the frame owns them and
+  answers `GET /api/s2s/membership/?sub=&org=` to a root holding `S2S_TOKEN`; the root
+  asks on every org-scoped request, cached a minute. Later, the LinkedTrust `trust` claim
+  (`earnkit/docs/SSO-AND-TEAMS.md`, section 2).
