@@ -5,7 +5,7 @@
      "attributes": {"data-up": "LinkedTrust server, e.g. https://live.linkedtrust.us", "data-query": "text match", "data-filter": "ratings | credentials", "data-subject": "exact subject URI", "data-claim": "claim type", "data-issuer": "issuer id", "data-limit": "default 10", "data-refresh": "seconds, default 60, 0 = never"},
      "reads": ["GET /api/feed", "GET /api/claim"]},
     {"tag": "atproto-thread", "src": "https://demos.linkedtrust.us/baobab/components/atproto-thread.js", "what": "Replies to one Bluesky post, shown as comments on a page; people comment by replying on Bluesky", "signin": false, "contract": true,
-     "attributes": {"data-up": "AT Proto app view, e.g. https://public.api.bsky.app", "data-post": "bsky.app post link or at:// URI", "data-depth": "default 3", "data-refresh": "seconds, default 60"},
+     "attributes": {"data-up": "AT Proto app view, e.g. https://public.api.bsky.app", "data-post": "bsky.app post link or at:// URI", "data-depth": "default 3", "data-refresh": "seconds, default 60", "data-reply": "yes = show Reply on Bluesky; set only for a viewer signed in with Bluesky"},
      "reads": ["app.bsky.feed.getPostThread", "com.atproto.identity.resolveHandle"]},
     {"tag": "atproto-feed", "src": "https://demos.linkedtrust.us/baobab/components/atproto-feed.js", "what": "Latest posts from one Bluesky account", "signin": false, "contract": true,
      "attributes": {"data-up": "AT Proto app view", "data-actor": "handle or DID", "data-limit": "default 5", "data-replies": "yes to include replies", "data-refresh": "seconds, default 120"},

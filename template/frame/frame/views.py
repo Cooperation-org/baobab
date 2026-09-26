@@ -45,7 +45,7 @@ def dashboard(request, org, dashboard="home"):
     spec = load_dashboard(dashboard)
     if membership is None or (spec.get("roles") and membership.role not in spec["roles"]):
         raise Http404
-    peers = {p.slug: p for p in Peer.objects.all()}
+    peers = {p.slug: p for p in Peer.objects.order_by("name")}
     cards, scripts = [], []
     for c in spec.get("cards", []):
         card = {"id": c["id"], "w": int(c.get("w", 4)), "title": c.get("title", "")}
@@ -62,4 +62,5 @@ def dashboard(request, org, dashboard="home"):
     return render(request, "frame/dashboard.html", {
         "org": membership.org, "role": membership.role, "dashboard": dashboard,
         "title": spec.get("title", dashboard), "cards": cards, "scripts": scripts,
+        "apps": list(peers.values()),
     })

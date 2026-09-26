@@ -46,13 +46,14 @@ A dashboard is a file, `dashboards/<name>.json`:
   "title": "Home",
   "roles": [],
   "cards": [
-    {"id": "welcome", "w": 12, "title": "Welcome", "template": "frame/cards/welcome.html"},
+    {"id": "apps", "w": 12, "title": "Apps", "template": "frame/cards/apps.html"},
     {"id": "items", "w": 6, "title": "Items", "peer": "planner", "tag": "planner-items"}
   ]
 }
 ```
 
-`roles` empty: every member of the org. `w` is a width out of 12. A card is a template in
+The default dashboard is one card, Apps: every peer, opening its app. `roles` empty: every
+member of the org. `w` is a width out of 12. A card is a template in
 this frame, or a peer's custom element; the peer (its app, API and cards-file URLs) is a row
 under Peers in the admin, and its cards-file origin is the only outside script the page
 may load. Card order in the file is the default arrangement; each person's changes are

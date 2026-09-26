@@ -9,10 +9,13 @@
 //   data-post     the post: a bsky.app link, or an at:// URI
 //   data-depth    reply levels shown (default 3)
 //   data-refresh  seconds between checks (default 60; 0 = never)
+//   data-reply    "yes" shows "Reply on Bluesky". Set it only for a viewer who can reply:
+//                 one signed in with Bluesky (LinkedTrust sign-in can be a Bluesky login).
+//                 The host page knows who is looking; this card does not. Default: read only.
 //
-// People comment by replying on Bluesky ("Reply on Bluesky" opens the post). Replies
-// appear here on the next check. Nothing is stored anywhere but Bluesky, so no backend.
-// The post cannot be found: hidden. Vanilla JS, no shadow DOM, textContent only.
+// Replies appear here on the next check. Nothing is stored anywhere but Bluesky, so no
+// backend. No replies and no reply link, or the post cannot be found: hidden.
+// Vanilla JS, no shadow DOM, textContent only.
 
 (function () {
   'use strict';
@@ -87,20 +90,24 @@
       var self = this;
       return this.xrpc('app.bsky.feed.getPostThread', { uri: this.uri, depth: this.dataset.depth || '3', parentHeight: '0' })
         .then(function (j) { self.render(j.thread); })
-        .catch(function () { if (!self.querySelector('.at-reply')) self.hidden = true; });
+        .catch(function () { if (!self.querySelector('li, .at-reply')) self.hidden = true; });
     }
 
     render(thread) {
       if (!thread || !thread.post) { this.hidden = true; return; }
       var list = this.replies(thread.replies || []);
-      var reply = el('a', 'at-reply', 'Reply on Bluesky');
-      reply.href = webUrl(thread.post.uri, thread.post.author && thread.post.author.handle) || '#';
-      reply.target = '_blank';
-      reply.rel = 'noopener';
+      var href = this.dataset.reply === 'yes'
+        && webUrl(thread.post.uri, thread.post.author && thread.post.author.handle);
       this.replaceChildren();
       if (list) this.appendChild(list);
-      this.appendChild(reply);
-      this.hidden = false;
+      if (href) {
+        var reply = el('a', 'at-reply', 'Reply on Bluesky');
+        reply.href = href;
+        reply.target = '_blank';
+        reply.rel = 'noopener';
+        this.appendChild(reply);
+      }
+      this.hidden = !list && !href;
     }
 
     replies(items) {

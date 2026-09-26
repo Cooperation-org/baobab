@@ -2,6 +2,6 @@
   "title": "Home",
   "roles": [],
   "cards": [
-    {"id": "welcome", "w": 12, "title": "Welcome", "template": "frame/cards/welcome.html"}
+    {"id": "apps", "w": 12, "title": "Apps", "template": "frame/cards/apps.html"}
   ]
 }

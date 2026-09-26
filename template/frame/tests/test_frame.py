@@ -29,7 +29,7 @@ def test_layout_is_the_persons_own(client, member, stranger):
     url = "/api/me/layouts/home/"
     client.force_login(member)
     assert client.get(url).json() == {"layout": {}}
-    layout = {"items": {"welcome": {"x": 0, "y": 0, "w": 12}}, "hidden": []}
+    layout = {"items": {"apps": {"x": 0, "y": 0, "w": 12}}, "hidden": []}
     assert client.put(url, {"layout": layout}, content_type="application/json", **EMBED).status_code == 200
     assert client.get(url).json() == {"layout": layout}
     client.force_login(stranger)

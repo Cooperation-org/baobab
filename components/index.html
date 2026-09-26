@@ -78,12 +78,13 @@
 <section class="c" id="atproto-thread">
   <div>
     <h2><code>&lt;atproto-thread&gt;</code></h2>
-    <p class="what">Comments on your page, made by replying to a Bluesky post. Replies show here within a minute. Nothing is stored anywhere but Bluesky.</p>
+    <p class="what">Comments on your page, made by replying to a Bluesky post. Replies show here within a minute. Nothing is stored anywhere but Bluesky. "Reply on Bluesky" shows only when the page sets <code>data-reply="yes"</code>, for a viewer signed in with Bluesky.</p>
     <dl>
       <dt>data-up</dt><dd>An AT Proto app view</dd>
       <dt>data-post</dt><dd>The post: a bsky.app link or an <code>at://</code> URI</dd>
       <dt>data-depth</dt><dd>Reply levels (3)</dd>
       <dt>data-refresh</dt><dd>Seconds between checks (60)</dd>
+      <dt>data-reply</dt><dd><code>yes</code>: show "Reply on Bluesky" (viewer signed in with Bluesky)</dd>
     </dl>
     <div class="snippet"><pre>&lt;script src="https://demos.linkedtrust.us/baobab/components/atproto-thread.js" defer&gt;&lt;/script&gt;
 &lt;atproto-thread data-up="https://public.api.bsky.app"

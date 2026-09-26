@@ -17,7 +17,7 @@ Load from `https://demos.linkedtrust.us/baobab/components/<file>`.
 | Tag | What | Attributes | Contract |
 |---|---|---|---|
 | `<lt-claims>` | Recent LinkedTrust claims, filtered, checked again every minute | `data-up`, `data-query`, `data-filter` (ratings, credentials), `data-subject`, `data-claim`, `data-issuer`, `data-limit`, `data-refresh` | yes |
-| `<atproto-thread>` | Comments on a page, made by replying to a Bluesky post; replies show within a minute; stored only on Bluesky | `data-up` (an app view, e.g. `https://public.api.bsky.app`), `data-post`, `data-depth`, `data-refresh` | yes |
+| `<atproto-thread>` | Comments on a page, made by replying to a Bluesky post; replies show within a minute; stored only on Bluesky | `data-up` (an app view, e.g. `https://public.api.bsky.app`), `data-post`, `data-depth`, `data-refresh`, `data-reply` (show Reply on Bluesky; set only for a viewer signed in with Bluesky) | yes |
 | `<atproto-feed>` | Latest posts from one Bluesky account | `data-up`, `data-actor`, `data-limit`, `data-replies`, `data-refresh` | yes |
 
 ## Dashboard pieces
