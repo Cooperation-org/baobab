@@ -13,13 +13,15 @@ Status: design draft, under review. The templates below are not generated yet.
 | The place people land: sign-in, their orgs, the nav, the dashboard | **baobab** (frame) | Django app |
 | A front end for one job (tasks, CRM, planning) that also gives the dashboard cards | **frond** | React app + a cards file |
 | The backend a frond needs, when no existing system has the data | **root** | Django API |
-| A frond on top of a system that already exists (Taiga, Odoo, anything with OIDC and an API) | **vine** | a connector, no new backend |
+
+A frond on a system that already exists (Taiga, Odoo, anything with OIDC and an API) needs
+no new backend: pick **frond** and answer "existing system". That connection is a **vine**.
 
 ```
-uvx copier copy gh:Cooperation-org/baobab my-app
+uvx copier copy gh:Cooperation-org/baobab my-app     # once the templates exist
 ```
 
-The first question is which of the four. Everything after that has a default.
+The first question is which of the three. Everything after that has a default.
 
 ## How they fit
 

@@ -59,6 +59,15 @@ Each element from PRINCIPLES.md, as rules you can check in a diff.
 - Never keep a token in a place another origin can read. Session cookies are
   `HttpOnly`, `Secure`, `SameSite=Lax`.
 
+## Security (CONTRACT.md section 5)
+
+- The backend checks org membership from the URL path on every request, including
+  `/api/live/` subscriptions. `data-org` is never a permission.
+- Writes require `X-Baobab: 1` and an `Origin` in `EMBED_ORIGINS`.
+- Never hand a token to page JavaScript for cards to use.
+- A card never shows a sensitive record; a root never caches sensitive data.
+- Log refusals server-side.
+
 ## A card with nothing to show hides
 
 - Any non-200, bad payload, or empty list: `this.hidden = true` and return.
@@ -80,11 +89,13 @@ Each element from PRINCIPLES.md, as rules you can check in a diff.
 
 - The generator asks the kind first. Every other question has a default a person can
   accept by pressing Enter.
-- Adding a question or a setting needs the project owner's OK.
+- Adding a generator question, or a name to the shared settings table (CONTRACT.md
+  section 10), needs the project owner's OK. A piece's own settings, prefixed with its slug,
+  do not.
 
 ## Stop and ask before
 
 - A new kind, a new setting name, a new cross-piece protocol.
 - Anything that makes one piece require another to be running.
-- A database table in the frame beyond people, orgs, members, nav, dashboards, layouts.
+- A frame table not listed in CONTRACT.md section 8.
 - Any change to a published link shape.
