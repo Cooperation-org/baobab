@@ -2,7 +2,7 @@
 
 Templates for apps that compose into one dashboard, and work on their own.
 
-**Read first: [PRINCIPLES.md](PRINCIPLES.md).**
+**Read first: [PRINCIPLES.md](PRINCIPLES.md).** Agents: [AGENTS.md](AGENTS.md).
 
 Status: design draft, under review. The templates below are not generated yet.
 
