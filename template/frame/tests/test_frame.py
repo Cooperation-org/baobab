@@ -115,3 +115,23 @@ def test_sign_out_from_the_nav(client, member):
     assert client.get("/api/nav/").json()["me"]
     assert client.post("/api/logout/", **EMBED).status_code == 204
     assert client.get("/api/nav/").json()["me"] is None
+
+
+def test_dashboard_cards_own_script_and_requires(client, member, settings, tmp_path, monkeypatch):
+    import json
+
+    from frame import views
+
+    (tmp_path / "home.json").write_text(json.dumps({"title": "Volunteer Dashboard", "cards": [
+        {"id": "mine", "w": 6, "title": "Mine", "tag": "acme-mine", "script": "embed/acme.js"},
+        {"id": "cases", "w": 6, "title": "Cases", "template": "frame/cards/apps.html", "requires": "CASES_URL"},
+    ]}))
+    monkeypatch.setattr(views, "DASHBOARDS", tmp_path)
+    client.force_login(member)
+    body = client.get("/o/acme/").content.decode()
+    assert "<h1 class=\"dash-title\">Volunteer Dashboard</h1>" in body
+    assert '<acme-mine data-up="http://testserver" data-org="acme"></acme-mine>' in body
+    assert "/static/embed/acme.js" in body
+    assert 'data-card="cases"' not in body
+    settings.CASES_URL = "https://cases.example"
+    assert 'data-card="cases"' in client.get("/o/acme/").content.decode()

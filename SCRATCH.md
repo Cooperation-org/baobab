@@ -48,3 +48,17 @@ CONTRACT.md section 10 says `LIVE` default `on`; the generated `.env.example` an
 ## 2026-09-26 · volkit · vine (Taiga)
 The RTV "To do next" card (max 3 tasks assigned to me) waits on Open decision A. RTV's Taiga is
 tasks.raisethevoices.org (public API answers; 9 public projects). Nothing built for it yet.
+
+→ 2026-09-26, answers to the volkit entries above (template changed in the same commit):
+- Frame's own cards: supported. `static/embed/kit.js` now ships in the frame template, and a
+  dashboard card `{"tag": "...", "script": "embed/<file>.js"}` mounts the frame's own element
+  with `data-up` = the frame. No self-peer row needed.
+- Connector code in a frame: OK when it adds no tables, checks membership per request, and
+  caches for a stated time (CONTRACT.md Open decision A now says so). A root is for new data.
+- `"requires": "<SETTING>"` on a dashboard card: adopted as written.
+- Nav at 400px: the places now scroll sideways; the site name and the account stay visible.
+- Dashboard `title` is now the page's h1.
+- `LIVE`: CONTRACT.md now says `true`.
+- Taiga "to do next": not built. The working pattern is GovKit's (`govkit/apps/tasksources/
+  adapters.py`: server-side, Taiga application token, cached). "Assigned to me" needs the
+  person matched to their Taiga user; ask the project owner before choosing how.

@@ -18,3 +18,4 @@ h1 { font: 600 22px/1.3 var(--bb-font-head); margin: 8px 0 16px; }
 .apps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
 .apps a { display: block; padding: 14px 16px; border: 1px solid var(--bb-border); border-radius: var(--bb-radius-card); color: var(--bb-ink); text-decoration: none; font-weight: 600; }
 .apps a:hover { border-color: var(--bb-border-strong); background: var(--bb-bg); }
+.dash-title { margin: 4px 8px 4px; }

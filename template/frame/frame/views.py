@@ -1,8 +1,9 @@
 """The frame's pages: the landing page, and each org's dashboards.
 
 A dashboard is a file, dashboards/<name>.json: who sees it, and its cards in
-default order. A card is either a template in this frame or a peer's custom
-element. How each person arranges it is theirs (DashLayout)."""
+default order. A card is a template in this frame, a custom element from this
+frame's own static files, or a peer's custom element. A card with "requires"
+shows only while that setting is set. How each person arranges it is theirs."""
 
 import json
 import re
@@ -11,6 +12,7 @@ from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
 from django.http import Http404
 from django.shortcuts import redirect, render
+from django.templatetags.static import static
 
 from .models import Membership, Peer
 
@@ -48,9 +50,18 @@ def dashboard(request, org, dashboard="home"):
     peers = {p.slug: p for p in Peer.objects.order_by("name")}
     cards, scripts = [], []
     for c in spec.get("cards", []):
+        if c.get("requires") and not getattr(settings, c["requires"], None):
+            continue
         card = {"id": c["id"], "w": int(c.get("w", 4)), "title": c.get("title", "")}
         if "template" in c:
             card["template"] = c["template"]
+        elif "script" in c:
+            if not TAG.match(c.get("tag", "")):
+                continue
+            card.update(tag=c["tag"], own=True)
+            src = static(c["script"])
+            if src not in scripts:
+                scripts.append(src)
         else:
             peer = peers.get(c.get("peer"))
             if peer is None or not TAG.match(c.get("tag", "")):
