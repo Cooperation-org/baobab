@@ -4,7 +4,7 @@ Templates for apps that compose into one dashboard, and work on their own.
 
 **Read first: [PRINCIPLES.md](PRINCIPLES.md).** Agents: [AGENTS.md](AGENTS.md).
 
-Status: design draft, under review. The templates below are not generated yet.
+Status: first version, 2026-09-26. Templates render, build and pass their tests; see "What is not done yet" in CONTRACT.md.
 
 ## Pick one
 
@@ -18,7 +18,7 @@ A frond on a system that already exists (Taiga, Odoo, anything with OIDC and an 
 no new backend: pick **frond** and answer "existing system". That connection is a **vine**.
 
 ```
-uvx copier copy gh:Cooperation-org/baobab my-app     # once the templates exist
+uvx copier copy --trust gh:Cooperation-org/baobab my-app
 ```
 
 The first question is which of the three. Everything after that has a default.

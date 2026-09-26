@@ -80,6 +80,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_SAMESITE = "Lax"
+# Named per app, so pieces on one host (localhost ports in development) keep separate sessions.
+SESSION_COOKIE_NAME = "{{ slug | replace('-', '_') }}_session"
+CSRF_COOKIE_NAME = "{{ slug | replace('-', '_') }}_csrftoken"
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # --- Sign-in (CONTRACT.md section 1) ---

@@ -7,7 +7,6 @@
   <section class="card" data-card="{{ c.id }}" data-w="{{ c.w }}">
     <div class="card-header">
       <span class="card-title">{{ c.title }}</span>
-      {% if c.peer %}<a class="card-app" href="{{ c.peer.app_url }}">{{ c.peer.name }}</a>{% endif %}
     </div>
     {% if c.template %}{% include c.template %}{% else %}{% peer_card c org %}{% endif %}
   </section>

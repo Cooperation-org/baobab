@@ -48,8 +48,8 @@ def test_cross_origin_write_without_the_header_is_refused(member):
     assert r.status_code == 403
 
 
-def test_signed_out_gets_no_layout(client, db):
-    assert client.get("/api/me/layouts/home/").status_code == 403
+def test_signed_out_is_told_to_sign_in(client, db):
+    assert client.get("/api/me/layouts/home/").status_code == 401
 
 
 def test_nav_shows_each_person_their_places(client, member, db):
@@ -85,6 +85,8 @@ def test_s2s_membership(client, member):
     assert client.get(url, HTTP_AUTHORIZATION="Bearer t0k").json() == {"member": True, "role": "member"}
     assert client.get("/api/s2s/membership/?sub=42&org=other",
                       HTTP_AUTHORIZATION="Bearer t0k").json() == {"member": False, "role": None}
+    assert client.get("/api/s2s/orgs/?sub=42", HTTP_AUTHORIZATION="Bearer t0k").json() == {
+        "orgs": [{"slug": "acme", "name": "Acme", "role": "member"}]}
 
 
 @override_settings(LIVE=True)

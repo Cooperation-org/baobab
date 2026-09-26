@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 
 from . import live
 from .models import Item
-from .security import IsOrgMember, member_role
+from .security import IsOrgMember, member_role, orgs_for
 
 log = logging.getLogger(__name__)
 
@@ -24,7 +24,7 @@ def site(request):
 class MeView(APIView):
     def get(self, request):
         u = request.user
-        return Response({"name": u.get_full_name() or u.email, "email": u.email})
+        return Response({"name": u.get_full_name() or u.email, "email": u.email, "orgs": orgs_for(u)})
 
 
 class ItemSerializer(serializers.ModelSerializer):

@@ -94,6 +94,19 @@ def s2s_membership(request):
     return JsonResponse({"member": role is not None, "role": role})
 
 
+@require_GET
+def s2s_orgs(request):
+    """For roots: the orgs this person (OIDC sub) is in."""
+    if not s2s_authorized(request):
+        return JsonResponse({"detail": "forbidden"}, status=403)
+    ident = Identity.objects.filter(issuer=settings.OIDC_ISSUER, sub=request.GET.get("sub", "")).first()
+    orgs = []
+    if ident:
+        orgs = [{"slug": m.org.slug, "name": m.org.name, "role": m.role}
+                for m in Membership.objects.filter(user=ident.user_id).select_related("org").order_by("org__name")]
+    return JsonResponse({"orgs": orgs})
+
+
 async def live_view(request):
     """GET /api/live/?topics=<org>/<thing>,... as server-sent events."""
     if not settings.LIVE:
@@ -117,5 +130,6 @@ urls = [
     path("me/layouts/<slug:dashboard>/", LayoutView.as_view()),
     path("nav/", NavView.as_view()),
     path("s2s/membership/", s2s_membership),
+    path("s2s/orgs/", s2s_orgs),
     path("live/", live_view),
 ]

@@ -32,8 +32,8 @@ def test_non_members_are_refused(client, person):
         assert client.get(URL).status_code == 403
 
 
-def test_signed_out_is_refused(client, db):
-    assert client.get(URL).status_code == 403
+def test_signed_out_is_told_to_sign_in(client, db):
+    assert client.get(URL).status_code == 401
 
 
 def test_membership_is_asked_of_the_frame(person):

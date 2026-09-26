@@ -20,29 +20,53 @@ class EmbedSessionAuthentication(SessionAuthentication):
     They send `X-Baobab: 1`, which browsers send cross-origin only after a CORS
     preflight that only EMBED_ORIGINS pass."""
 
+    def authenticate_header(self, request):
+        # Signed out answers 401 (not 403), so a frond knows to send the person to sign in.
+        return 'Session realm="api"'
+
     def enforce_csrf(self, request):
         if request.headers.get("X-Baobab") == "1":
             return
         return super().enforce_csrf(request)
 
 
+def _ask_frame(path, params):
+    req = urllib.request.Request(
+        f"{settings.FRAME_URL}/api/s2s/{path}/?{urllib.parse.urlencode(params)}",
+        headers={"Authorization": f"Bearer {settings.S2S_TOKEN}"},
+    )
+    with urllib.request.urlopen(req, timeout=5) as r:
+        return json.load(r)
+
+
+def _sub(user):
+    ident = Identity.objects.filter(user=user, issuer=settings.OIDC_ISSUER).first()
+    return ident.sub if ident else None
+
+
+def orgs_for(user):
+    """The orgs the person is in, asked of the frame: [{slug, name, role}]."""
+    sub = _sub(user)
+    if sub is None:
+        return []
+    try:
+        return _ask_frame("orgs", {"sub": sub}).get("orgs", [])
+    except (OSError, ValueError) as e:
+        log.warning("org list failed: %s", e)
+        return []
+
+
 def member_role(user, org):
     """The person's role in `org`, asked of the frame, or None. Cached briefly."""
-    ident = Identity.objects.filter(user=user, issuer=settings.OIDC_ISSUER).first()
-    if ident is None:
+    sub = _sub(user)
+    if sub is None:
         return None
-    key = f"member:{ident.sub}:{org}"
+    key = f"member:{sub}:{org}"
     hit = cache.get(key)
     if hit is not None:
         return hit or None
-    query = urllib.parse.urlencode({"sub": ident.sub, "org": org})
-    req = urllib.request.Request(
-        f"{settings.FRAME_URL}/api/s2s/membership/?{query}",
-        headers={"Authorization": f"Bearer {settings.S2S_TOKEN}"},
-    )
     try:
-        with urllib.request.urlopen(req, timeout=5) as r:
-            role = json.load(r).get("role")
+        role = _ask_frame("membership", {"sub": sub, "org": org}).get("role")
     except (OSError, ValueError) as e:
         log.warning("membership check failed for org %s: %s", org, e)
         return None

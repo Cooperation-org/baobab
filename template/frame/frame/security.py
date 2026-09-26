@@ -17,6 +17,10 @@ class EmbedSessionAuthentication(SessionAuthentication):
     CORS preflight, which only EMBED_ORIGINS pass. A forged form can do neither.
     """
 
+    def authenticate_header(self, request):
+        # Signed out answers 401 (not 403), so a frond knows to send the person to sign in.
+        return 'Session realm="api"'
+
     def enforce_csrf(self, request):
         if request.headers.get("X-Baobab") == "1":
             return

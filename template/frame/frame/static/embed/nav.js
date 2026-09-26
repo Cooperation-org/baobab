@@ -2,7 +2,9 @@
 // that sets NAV_SRC to this file (CONTRACT.md section 6).
 //
 //   <script src="https://frame.example/static/embed/nav.js" defer></script>
-//   <baobab-nav data-up="https://frame.example"></baobab-nav>
+//   <baobab-nav></baobab-nav>
+//
+// It reads from the frame that served the script; data-up names another.
 //
 // Its places come from the frame (GET <data-up>/api/nav/), filtered there for the
 // person looking. No hostname is built here. Signed out: the site name and
@@ -13,6 +15,9 @@
 (function () {
   'use strict';
   if (window.customElements && customElements.get('baobab-nav')) return;
+
+  // The frame that served this file; data-up overrides it.
+  var FRAME = document.currentScript ? new URL(document.currentScript.src).origin : '';
 
   function ensureStyles() {
     if (document.getElementById('baobab-nav-styles')) return;
@@ -43,7 +48,9 @@
   function isHere(href) {
     try {
       var u = new URL(href, location.href);
-      return u.origin === location.origin && location.pathname.indexOf(u.pathname) === 0 && u.pathname !== '/';
+      var want = u.pathname.replace(/\/+$/, '');
+      var here = location.pathname.replace(/\/+$/, '');
+      return u.origin === location.origin && want !== '' && (here === want || here.indexOf(want + '/') === 0);
     } catch (e) { return false; }
   }
 
@@ -52,7 +59,7 @@
       if (this._started) return;
       this._started = true;
       ensureStyles();
-      var up = (this.dataset.up || '').replace(/\/$/, '');
+      var up = (this.dataset.up || FRAME).replace(/\/$/, '');
       var self = this;
       if (!up) return;
       fetch(up + '/api/nav/', { credentials: 'include' })
