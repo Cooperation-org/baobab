@@ -1,15 +1,14 @@
-// {{ name }} cards. Vanilla custom elements: no framework, no build step, no
+// {{ name }} web components. Vanilla custom elements: no framework, no build step, no
 // shadow DOM. Style them from the host page by tag name.
 //
-//   <{{ slug }}-items data-up="<API_URL>" data-org="<org slug>" data-app="<app URL>" data-limit="5">
-//     The org's latest items (data-limit, default 5), one per row, and a link into the app. Hides itself when
-//     there is nothing to show.
+//   <{{ slug }}-items data-up="<this backend's URL>" data-limit="5">
+//     The signed-in person's latest items (data-limit, default 5), one per row. Hides itself
+//     when there is nothing to show.
 
 (function () {
   'use strict';
 
   var SLUG = '{{ slug }}';
-  var APP_NAME = {{ name|tojson }};
   var KIT = new URL('kit.js', document.currentScript.src).href;
 
   function loadKit() {
@@ -26,10 +25,7 @@
     if (customElements.get(SLUG + '-items')) return;
     customElements.define(SLUG + '-items', class extends HTMLElement {
       connectedCallback() {
-        var org = this.dataset.org;
-        if (!org) return kit.hide(this);
-        this.path = '/api/orgs/' + encodeURIComponent(org) + '/items/?limit=' +
-          encodeURIComponent(this.dataset.limit || '5');
+        this.path = '/api/items/?limit=' + encodeURIComponent(this.dataset.limit || '5');
         this.load();
       }
 
@@ -44,13 +40,6 @@
             list.appendChild(row);
           });
           host.replaceChildren(list);
-          var app = host.dataset.app;
-          if (app && /^https?:\/\//i.test(app)) {
-            var open = document.createElement('a');
-            open.href = app.replace(/\/+$/, '') + '/o/' + encodeURIComponent(host.dataset.org) + '/';
-            open.textContent = 'Open ' + APP_NAME;
-            host.appendChild(open);
-          }
           host.hidden = false;
         }).catch(function () { kit.hide(host); });
       }

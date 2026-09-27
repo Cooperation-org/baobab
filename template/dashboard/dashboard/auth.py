@@ -17,7 +17,7 @@ NEXT_KEY = "signin_next"
 
 
 def safe_next(request, raw):
-    """A path on this host, or a URL on an origin in EMBED_ORIGINS (a frontend that
+    """A path on this host, or a URL on an origin in EMBED_ORIGINS (a page that
     sent the person here to sign in). Anything else goes home."""
     if not raw:
         return "/"

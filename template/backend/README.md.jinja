@@ -1,32 +1,24 @@
 # {{ name }}
 
-A backend for a frontend: a Django API holding data no existing system holds. Made
-from [Cooperation-org/baobab](https://github.com/Cooperation-org/baobab); the rules are its
-[PRINCIPLES](https://github.com/Cooperation-org/baobab/blob/main/PRINCIPLES.md),
-[AGENTS](https://github.com/Cooperation-org/baobab/blob/main/AGENTS.md) and
-[CONTRACT](https://github.com/Cooperation-org/baobab/blob/main/CONTRACT.md).
+A backend: a Django API for data no existing system holds, with its own web components that
+any dashboard can show. Made from [Cooperation-org/baobab](https://github.com/Cooperation-org/baobab); its rules are
+[CONTRACT.md](https://github.com/Cooperation-org/baobab/blob/main/CONTRACT.md).
 
-`Item` in `api/models.py` is the example. Replace it with what this backend owns.
+`Item` in `api/models.py` and `<{{ slug }}-items>` are the example. Replace them with what this
+backend owns and who may see it.
 
 ## Run it
 
 ```
 uv venv && uv pip install -r requirements.txt
-cp .env.example .env          # DATABASE_URL, the OIDC client, DASHBOARD_URL and S2S_TOKEN
+cp .env.example .env          # DATABASE_URL and the OIDC client
 .venv/bin/python manage.py migrate
 .venv/bin/python manage.py runserver 8001
 .venv/bin/pytest
 ```
 
-Locally, with a dashboard app running and no OIDC client:
-
-1. The same `S2S_TOKEN` in both `.env` files; `DASHBOARD_URL` = the dashboard app.
-2. In the dashboard app's admin: yourself as a member of an org, and an Identity for you
-   (issuer = `OIDC_ISSUER`, any `sub`).
-3. Here: `manage.py createsuperuser`, sign in at `/admin/`, add an Identity with the same
-   issuer and `sub`. That `sub` is how this backend asks the dashboard app for your orgs.
-
-Production: `gunicorn config.wsgi:application`.
+Production: `gunicorn config.wsgi:application`, after `manage.py collectstatic`.
+Locally without an OIDC client: `manage.py createsuperuser`, sign in at `/admin/`.
 
 ## Sign-in (LinkedTrust)
 
@@ -47,12 +39,13 @@ Endpoints, scopes and the flow: `trust_claim_backend/docs/sso-integration.md`.
 |---|---|
 | `/auth/login/?next=` | Sign in, then back to `next` (a URL on an origin in `EMBED_ORIGINS`) |
 | `/api/me/` | The signed-in person |
-| `/api/orgs/<org>/items/` | GET the org's items, POST one (`X-Embed: 1`) |
+| `/api/items/` | GET the person's items (`?limit=`), POST one (`X-Embed: 1`) |
+| `/static/embed/{{ slug }}.js` | The web components: `<{{ slug }}-items data-up="<this backend>" data-limit="5">` |
 
-Who is in which org is the dashboard app's fact. Every org-scoped request asks the dashboard app
-(`DASHBOARD_URL/api/v1/accounts/s2s/identity/linkedtrust/<sub>/`, the same as GovKit answers, so
-`DASHBOARD_URL` may be a dashboard app or GovKit), cached for a minute.
+To show them on a dashboard app: add this backend under Apps (API = this backend's URL,
+web components file = `/static/embed/{{ slug }}.js`), put the dashboard's origin in
+`EMBED_ORIGINS` here, and add a card with `"app": "{{ slug }}"`.
 
 ## Links
 
-`/api/orgs/<org>/items/`. Published link shapes never change (CONTRACT.md section 4).
+`/api/items/`. Published link shapes never change (CONTRACT.md section 4).

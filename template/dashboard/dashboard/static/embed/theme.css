@@ -1,5 +1,4 @@
 /* The dashboard app's look, as CSS custom properties only (CONTRACT.md section 7).
-   Frontends load this after their own CSS (THEME_CSS), so these values win.
    Starting values: GovKit's (govkit/static/govkit.css). */
 :root {
   --theme-bg: #faf9f6;

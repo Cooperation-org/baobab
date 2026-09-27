@@ -299,7 +299,7 @@
     }
 
     // A card marked data-autohide leaves the grid while everything in it besides its
-    // heading is hidden or empty (a peer's card that has nothing for this person).
+    // heading is hidden or empty (an app's card that has nothing for this person).
     empty(c) {
       if (!c.node.hasAttribute('data-autohide')) return false;
       var parts = Array.prototype.filter.call(c.node.children, function (n) {

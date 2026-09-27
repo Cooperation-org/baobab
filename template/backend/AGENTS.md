@@ -1,9 +1,7 @@
 # For agents
 
-This is a backend. Before changing anything, read, in order:
-https://github.com/Cooperation-org/baobab/blob/main/PRINCIPLES.md,
-https://github.com/Cooperation-org/baobab/blob/main/AGENTS.md,
-https://github.com/Cooperation-org/baobab/blob/main/CONTRACT.md.
+This is a backend. Read https://github.com/Cooperation-org/baobab/blob/main/AGENTS.md first.
 
-Every org-scoped view uses `IsOrgMember` (the org comes from the URL path and is checked
-with the dashboard app). Never store who is in which org here, and never cache sensitive data.
+Its web components are in `api/static/embed/` and read only this backend. Every view decides
+who may see what from the signed-in person. It does not call other backends, and never
+caches sensitive data.

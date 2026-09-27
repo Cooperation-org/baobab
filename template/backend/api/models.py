@@ -1,5 +1,5 @@
 """This backend's data. `Item` is the example: replace it with what this backend owns.
-Org membership is not here: it is the dashboard app's (see security.member_role)."""
+Who may see what is decided here, on this backend's own data."""
 
 from django.conf import settings
 from django.db import models
@@ -17,7 +17,6 @@ class Identity(models.Model):
 
 
 class Item(models.Model):
-    org = models.SlugField(help_text="The dashboard app's org slug.")
     title = models.CharField(max_length=300)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True)

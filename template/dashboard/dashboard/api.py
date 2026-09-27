@@ -1,40 +1,16 @@
-"""The dashboard app's JSON, under /api/. Org scope is checked here on every request; an
-attribute on a page is never a permission (CONTRACT.md section 5)."""
+"""The dashboard app's JSON, under /api/: the nav, sign-out, and each person's own
+arrangement of a dashboard."""
 
 import json
-import logging
 
 from django.conf import settings
 from django.contrib.auth import logout
-from django.http import HttpResponse, JsonResponse
 from django.urls import path
-from django.views.decorators.http import require_GET
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import DashLayout, Identity, Membership, NavPlace
-from .security import s2s_authorized
-
-log = logging.getLogger(__name__)
-
-
-def roles_of(user):
-    """{org_slug: role} for a signed-in person."""
-    return dict(Membership.objects.filter(user=user).values_list("org__slug", "role"))
-
-
-class MeView(APIView):
-    def get(self, request):
-        u = request.user
-        return Response({
-            "name": u.get_full_name() or u.email,
-            "email": u.email,
-            "orgs": [
-                {"slug": m.org.slug, "name": m.org.name, "role": m.role}
-                for m in Membership.objects.filter(user=u).select_related("org").order_by("org__name")
-            ],
-        })
+from .models import DashLayout, NavPlace
 
 
 class LayoutView(APIView):
@@ -59,66 +35,32 @@ class LayoutView(APIView):
 
 
 class NavView(APIView):
-    """What <site-nav> shows this viewer."""
+    """What <site-nav> shows: the places, and who is signed in."""
 
     permission_classes = [AllowAny]
 
     def get(self, request):
         u = request.user
         signed_in = u.is_authenticated
-        held = set(roles_of(u).values()) if signed_in else set()
-        places = []
-        for p in NavPlace.objects.all():
-            wanted = {r.strip() for r in p.roles.split(",") if r.strip()}
-            if "public" in wanted or (signed_in and (not wanted or wanted & held)):
-                places.append({"label": p.label, "url": request.build_absolute_uri(p.url)})
         return Response({
             "site": {"name": settings.SITE_NAME, "url": request.build_absolute_uri("/")},
-            "places": places,
+            "places": [{"label": p.label, "url": request.build_absolute_uri(p.url)}
+                       for p in NavPlace.objects.all()] if signed_in else [],
             "me": {"name": u.get_full_name() or u.email} if signed_in else None,
             "login_url": request.build_absolute_uri("/auth/login/"),
         })
 
 
 class LogoutView(APIView):
-    """Sign out of this dashboard app. Called from <site-nav> on any page, with X-Embed."""
+    """Sign out of this dashboard app, from <site-nav> on any page, with X-Embed."""
 
     def post(self, request):
         logout(request)
         return Response(status=204)
 
 
-@require_GET
-def s2s_identity(request, provider, subject):
-    """For backends: who this login is and which orgs they are in.
-
-    Same path and answer as GovKit's (`govkit/apps/accounts/api.py`, s2s_identity), so a
-    backend works against either. `provider` is "linkedtrust" for OIDC_ISSUER. A stranger
-    is 404; someone in no org is 200 with no memberships.
-    """
-    if not s2s_authorized(request):
-        return JsonResponse({"error": "unauthorized"}, status=401)
-    ident = None
-    if provider == "linkedtrust":
-        ident = Identity.objects.select_related("user").filter(issuer=settings.OIDC_ISSUER, sub=subject).first()
-    if ident is None or not ident.user.is_active:
-        return JsonResponse({"error": "not found"}, status=404)
-    user = ident.user
-    return JsonResponse({
-        "display_name": user.get_full_name() or user.email,
-        "email": user.email,
-        "pool": False,
-        "memberships": [
-            {"org_slug": m.org.slug, "org_name": m.org.name, "role": m.role}
-            for m in Membership.objects.filter(user=user).select_related("org").order_by("org__slug")
-        ],
-    })
-
-
 urls = [
-    path("me/", MeView.as_view()),
-    path("me/layouts/<slug:dashboard>/", LayoutView.as_view()),
     path("nav/", NavView.as_view()),
     path("logout/", LogoutView.as_view()),
-    path("v1/accounts/s2s/identity/<slug:provider>/<path:subject>/", s2s_identity),
+    path("me/layouts/<slug:dashboard>/", LayoutView.as_view()),
 ]

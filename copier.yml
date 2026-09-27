@@ -7,9 +7,8 @@ kind:
   type: str
   help: What are you building?
   choices:
-    "dashboard: where people land (sign-in, orgs, nav, dashboards)": dashboard
-    "frontend: a React app for one job, with web components for dashboards": frontend
-    "backend: a Django API for a frontend, for data no existing system holds": backend
+    "backend: a Django API with its own web components, for data no existing system holds": backend
+    "dashboard: where people land (sign-in, nav, dashboards of web components)": dashboard
 
 slug:
   type: str
@@ -22,11 +21,3 @@ name:
   help: Name people see
   default: "{{ slug | replace('-', ' ') | title }}"
 
-backend:
-  type: str
-  help: Where does this frontend's data live?
-  when: "{{ kind == 'frontend' }}"
-  choices:
-    "a new backend (Django API made from this template)": new
-    "an existing system (Taiga, Odoo, anything with OIDC and an API)": existing
-  default: new

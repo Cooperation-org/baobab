@@ -13,6 +13,5 @@ urlpatterns = [
     path("auth/linkedtrust/callback", auth.Callback.as_view(), name="linkedtrust_callback"),
     path("api/", include(api.urls)),
     path("", views.home, name="home"),
-    path("o/<slug:org>/", views.dashboard, name="dashboard"),
-    path("o/<slug:org>/<slug:dashboard>/", views.dashboard, name="dashboard_named"),
+    path("d/<slug:dashboard>/", views.dashboard, name="dashboard"),
 ]

@@ -1,6 +1,6 @@
-"""The dashboard app's data: who people are, which orgs they are in, which pieces it shows,
-its nav, and how each person arranged each dashboard. Nothing else lives here
-(CONTRACT.md section 8)."""
+"""The dashboard app's data: sign-in ids, which apps' web components it shows, the nav, and how
+each person arranged each dashboard. Nothing else lives here (CONTRACT.md section 8).
+Who may see what is decided by each app's own backend, never here."""
 
 from django.conf import settings
 from django.db import models
@@ -20,54 +20,26 @@ class Identity(models.Model):
         return f"{self.user} @ {self.issuer}"
 
 
-class Org(models.Model):
-    slug = models.SlugField(unique=True)
-    name = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.name
-
-
-class Role(models.TextChoices):
-    ADMIN = "admin"
-    MEMBER = "member"
-
-
-class Membership(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="memberships")
-    org = models.ForeignKey(Org, on_delete=models.CASCADE, related_name="memberships")
-    role = models.CharField(max_length=20, choices=Role.choices, default=Role.MEMBER)
-
-    class Meta:
-        constraints = [models.UniqueConstraint(fields=["user", "org"], name="uniq_membership")]
-
-    def __str__(self):
-        return f"{self.user} in {self.org} ({self.role})"
-
-
-class Peer(models.Model):
-    """A frontend or backend this dashboard app shows. Its embed_url is the only script source a
-    dashboard loads besides the dashboard app's own (CONTRACT.md section 5)."""
+class App(models.Model):
+    """An app whose web components this dashboard shows. Its embed_url is the only script
+    source a dashboard loads besides this app's own (CONTRACT.md section 5)."""
 
     slug = models.SlugField(unique=True)
     name = models.CharField(max_length=200)
-    app_url = models.URLField(help_text="Where a card's expand link goes.")
-    api_url = models.URLField(help_text="Handed to its cards as data-up.")
-    embed_url = models.URLField(blank=True, help_text="Its cards file, e.g. https://planner.example/embed/planner.js")
+    app_url = models.URLField(help_text="Where the Apps card and a web component's link go.")
+    api_url = models.URLField(help_text="Handed to its web components as data-up.")
+    embed_url = models.URLField(blank=True, help_text="Its web components file, e.g. https://crm.example/embed/crm.js")
 
     def __str__(self):
         return self.name
 
 
 class NavPlace(models.Model):
+    """One place in the nav bar: this dashboard, another app, an existing system."""
+
     label = models.CharField(max_length=60)
     url = models.CharField(max_length=500, help_text="Absolute, or a path on this dashboard app.")
     order = models.PositiveSmallIntegerField(default=0)
-    roles = models.CharField(
-        max_length=200, blank=True,
-        help_text="Who sees it: empty = anyone signed in; 'public' = everyone; "
-                  "else roles, comma-separated (admin, member).",
-    )
 
     class Meta:
         ordering = ["order", "id"]

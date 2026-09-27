@@ -1,11 +1,8 @@
 # {{ name }}
 
-A dashboard app: where people land. Sign-in, orgs and members, the nav, dashboards,
-and each person's arrangement of them. Made from
-[Cooperation-org/baobab](https://github.com/Cooperation-org/baobab); the rules are its
-[PRINCIPLES](https://github.com/Cooperation-org/baobab/blob/main/PRINCIPLES.md),
-[AGENTS](https://github.com/Cooperation-org/baobab/blob/main/AGENTS.md) and
-[CONTRACT](https://github.com/Cooperation-org/baobab/blob/main/CONTRACT.md).
+A dashboard app: where people land. Sign-in, a nav bar, and dashboards of web components
+from other apps, each person arranging their own. Made from [Cooperation-org/baobab](https://github.com/Cooperation-org/baobab); its rules are
+[CONTRACT.md](https://github.com/Cooperation-org/baobab/blob/main/CONTRACT.md).
 
 ## Run it
 
@@ -19,9 +16,7 @@ cp .env.example .env          # then fill in DATABASE_URL and the OIDC client
 ```
 
 Production: `gunicorn config.wsgi:application`, after `manage.py collectstatic`.
-
-To see a dashboard locally without an OIDC client: sign in at `/admin/` as the superuser,
-add yourself as a member on an org's admin page, then open `/o/<org>/`.
+Locally without an OIDC client: sign in at `/admin/` as the superuser, then open `/`.
 
 ## Sign-in (LinkedTrust)
 
@@ -40,28 +35,31 @@ Endpoints, scopes and the flow: `trust_claim_backend/docs/sso-integration.md`.
 
 | Path | What |
 |---|---|
-| `/` | Signed out: sign in. Signed in: your org's dashboard, or the list of your orgs |
-| `/o/<org>/`, `/o/<org>/<dashboard>/` | A dashboard, for members of that org |
+| `/` | Signed out: sign in. Signed in: the `home` dashboard |
+| `/d/<dashboard>/` | Another dashboard |
 | `/auth/login/?next=` | Sign in; `next` may be a path here or a URL on an origin in `EMBED_ORIGINS` |
-| `/static/embed/nav.js` | `<site-nav data-up="<this dashboard app>">`, for frontends to mount (their `NAV_SRC`) |
-| `/static/embed/theme.css` | The `--theme-*` variables, for frontends to load (their `THEME_CSS`) |
+| `/static/embed/nav.js` | `<site-nav data-up="<this app>">`: the nav bar, for any other app to mount so everything looks like one place |
+| `/static/embed/theme.css` | The `--theme-*` variables |
 | `/static/embed/grid.js` | `<dashboard-grid>`, the arrangeable dashboard |
-| `/api/me/` | The signed-in person and their orgs |
-| `/api/me/layouts/<dashboard>/` | GET, PUT, DELETE their arrangement |
-| `/api/nav/` | The nav places this viewer sees |
-| `/api/v1/accounts/s2s/identity/linkedtrust/<sub>/` | For backends, with `Authorization: Bearer <S2S_TOKEN>`: the person and their orgs. Same path and answer as GovKit |
+| `/api/nav/` | The nav places, for anyone signed in |
+| `/api/logout/` | POST with `X-Embed: 1`: sign out, from the nav on any page |
+| `/api/me/layouts/<dashboard>/` | GET, PUT, DELETE the person's arrangement |
+
+## Nav
+
+Places are rows under Nav places in the admin: a label and a URL, which may be this app,
+another app, or an existing system (Taiga, the CRM).
 
 ## Dashboards
 
-A dashboard is a file, `dashboards/<name>.json`:
+A dashboard is a file, `dashboards/<name>.json`, its cards in default order:
 
 ```json
 {
   "title": "Home",
-  "roles": [],
   "cards": [
     {"id": "apps", "w": 12, "title": "Apps", "template": "dashboard/cards/apps.html"},
-    {"id": "items", "w": 6, "title": "Items", "peer": "planner", "tag": "planner-items"},
+    {"id": "people", "w": 6, "title": "People", "app": "crm", "tag": "crm-people"},
     {"id": "mine", "w": 6, "title": "Mine", "tag": "{{ slug }}-mine", "script": "embed/{{ slug }}.js"},
     {"id": "cases", "w": 6, "title": "Cases", "template": "dashboard/cards/cases.html", "requires": "CASES_URL"},
     {"id": "claims", "w": 6, "title": "Claims", "tag": "lt-claims",
@@ -71,28 +69,23 @@ A dashboard is a file, `dashboards/<name>.json`:
 }
 ```
 
-The default dashboard is one card, Apps: every peer, opening its app. `roles` empty: every
-member of the org. `title` is the page heading.
+A card is one of:
 
-A card is one of three things:
+- `template`: a template in this app.
+- `tag` + `app`: an app's web component, from its web components file. It gets `data-up` =
+  the app's API and `data-app` = the app's URL.
+- `tag` + `script`: this app's own web component, from its static files (start from
+  `static/embed/kit.js`), with `data-up` = this app.
+- `tag` + `script` as a full URL: a component from a library. Its origin must be an app's
+  (add the library under Apps), because a script on the page runs as the viewer.
 
-- `template`: a template in this dashboard app.
-- `tag` + `script`: this dashboard app's own custom element, from its static files (start from
-  `static/embed/kit.js`). It gets `data-up` = this dashboard app and `data-org`.
-- `tag` + `peer`: a peer's custom element, from the peer's cards file.
-- `tag` + `script` as a full URL: a component from a library, e.g.
-  `https://demos.linkedtrust.us/baobab/components/lt-claims.js`. Its origin must be a peer's
-  (add the library under Peers), because a script on the page runs as the viewer.
+`attrs` adds `data-*` attributes (see COMPONENTS.md). `requires`: shown only while that setting
+is set. `w`: width out of 12. A card that cannot be shown is left out and the reason logged.
+Each person's arrangement is theirs.
 
-Any element card may add `"attrs": {"data-...": "..."}` (see the component's attributes in
-COMPONENTS.md). A card that cannot be shown is left out and the reason is logged.
-
-`requires`: the card shows only while that setting is set (unset means off). `w` is a width
-out of 12. A peer (its app, API and cards-file URLs) is a row under Peers in the admin, and
-its cards-file origin is the only outside script the page may load. Card order in the file
-is the default arrangement; each person's changes are theirs.
+An app (its URL, API and web components file) is a row under Apps in the admin. Each app's
+backend decides what the viewer may see; this app holds no permissions.
 
 ## Links
 
-`/`, `/o/<org>/`, `/o/<org>/<dashboard>/`. Published link shapes never change
-(CONTRACT.md section 4).
+`/`, `/d/<dashboard>/`. Published link shapes never change (CONTRACT.md section 4).

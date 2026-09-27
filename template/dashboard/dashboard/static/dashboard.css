@@ -6,8 +6,6 @@ h1 { font: 600 22px/1.3 var(--theme-font-head); margin: 8px 0 16px; }
 .btn { display: inline-block; font: inherit; font-weight: 500; color: var(--theme-on-accent); background: var(--theme-accent); border: 0; border-radius: var(--theme-radius); padding: 8px 16px; text-decoration: none; cursor: pointer; }
 .btn:hover { background: var(--theme-accent-deep); }
 .note { color: var(--theme-bad); }
-.orgs { list-style: none; padding: 0; }
-.orgs li { padding: 6px 0; }
 .card { background: var(--theme-surface); border: 1px solid var(--theme-border); border-radius: var(--theme-radius-card); padding: 18px 20px; }
 .card[hidden] { display: none; }
 .card > * + * { margin-top: 12px; }

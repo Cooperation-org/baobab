@@ -1,7 +1,4 @@
-"""This backend's JSON, under /api/. Every org-scoped route takes the org from the path
-and checks it with the dashboard app (CONTRACT.md section 5)."""
-
-import logging
+"""This backend's JSON, under /api/. Each view decides who may see what (CONTRACT.md section 5)."""
 
 from django.conf import settings
 from rest_framework import generics, serializers
@@ -9,9 +6,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Item
-from .security import IsOrgMember, member_role, orgs_for
-
-log = logging.getLogger(__name__)
 
 
 def site(request):
@@ -21,7 +15,7 @@ def site(request):
 class MeView(APIView):
     def get(self, request):
         u = request.user
-        return Response({"name": u.get_full_name() or u.email, "email": u.email, "orgs": orgs_for(u)})
+        return Response({"name": u.get_full_name() or u.email, "email": u.email})
 
 
 class ItemSerializer(serializers.ModelSerializer):
@@ -31,14 +25,14 @@ class ItemSerializer(serializers.ModelSerializer):
 
 
 class ItemsView(generics.ListCreateAPIView):
+    """The signed-in person's own items. Replace with this backend's own rule."""
+
     serializer_class = ItemSerializer
-    permission_classes = [IsOrgMember]
 
     def get_queryset(self):
-        items = Item.objects.filter(org=self.kwargs["org"])
+        items = Item.objects.filter(created_by=self.request.user)
         limit = self.request.query_params.get("limit", "")
         return items[: min(int(limit), 100)] if limit.isdigit() and int(limit) > 0 else items
 
     def perform_create(self, serializer):
-        serializer.save(org=self.kwargs["org"], created_by=self.request.user)
-
+        serializer.save(created_by=self.request.user)

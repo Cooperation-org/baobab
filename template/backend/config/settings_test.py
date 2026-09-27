@@ -11,8 +11,6 @@ for key, value in {
     "OIDC_CLIENT_SECRET": "test",
     "EMBED_ORIGINS": "https://cards.example",
     "ALLOWED_HOSTS": "testserver",
-    "DASHBOARD_URL": "https://dashboard.example",
-    "S2S_TOKEN": "t0k",
 }.items():
     os.environ.setdefault(key, value)
 

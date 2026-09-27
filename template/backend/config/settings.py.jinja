@@ -95,7 +95,7 @@ LINKEDTRUST_CLIENT_SECRET = env("OIDC_CLIENT_SECRET")
 LINKEDTRUST_SCOPES = "openid email profile trust"
 LOGIN_URL = "/auth/login/"
 
-# --- Pages whose cards or frontends read this API with credentials (CONTRACT.md section 5) ---
+# --- Pages whose web components read this API with credentials (CONTRACT.md section 5) ---
 EMBED_ORIGINS = env.list("EMBED_ORIGINS", default=[])
 CORS_ALLOWED_ORIGINS = EMBED_ORIGINS
 CORS_ALLOW_CREDENTIALS = True
@@ -103,11 +103,6 @@ CORS_URLS_REGEX = r"^/api/"
 from corsheaders.defaults import default_headers  # noqa: E402
 
 CORS_ALLOW_HEADERS = [*default_headers, "x-embed"]
-
-# Who is in which org is the dashboard app's fact; this backend asks it (CONTRACT.md section 14).
-DASHBOARD_URL = env("DASHBOARD_URL").rstrip("/")
-S2S_TOKEN = env("S2S_TOKEN")
-MEMBERSHIP_CACHE_SECONDS = 60
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ["api.security.EmbedSessionAuthentication"],

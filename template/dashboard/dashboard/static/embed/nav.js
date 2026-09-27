@@ -1,13 +1,12 @@
-// <site-nav> — the dashboard app's bar, mounted on the dashboard app's pages and on any frontend
-// that sets NAV_SRC to this file (CONTRACT.md section 6).
+// <site-nav>: the dashboard app's nav bar, mounted on its pages and on any other app
+// that loads this file, so every place looks like one (CONTRACT.md section 6).
 //
 //   <script src="https://dashboard.example/static/embed/nav.js" defer></script>
 //   <site-nav></site-nav>
 //
 // It reads from the dashboard app that served the script; data-up names another.
 //
-// Its places come from the dashboard app (GET <data-up>/api/nav/), filtered there for the
-// person looking. No hostname is built here. Signed out: the site name and
+// Its places come from the dashboard app (GET <data-up>/api/nav/), shown to anyone signed in. No hostname is built here. Signed out: the site name and
 // "Sign in". Quiet failure: if the dashboard app does not answer, the bar shows nothing.
 // Vanilla JS, no shadow DOM, textContent-only writes. Restyle from the host page
 // with `site-nav .bn-bar`, `site-nav a`, `site-nav a[aria-current="page"]`.

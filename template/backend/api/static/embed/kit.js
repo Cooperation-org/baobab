@@ -1,7 +1,7 @@
-// Helpers for this frontend's cards. The generator copied this file in; it is not
-// shared with any other frontend. The cards file loads it from the same directory
-// and finds it at window.embedKits[<this file's URL>], so two frontends' kits on
-// one dashboard never replace each other.
+// Helpers for this app's web components. The generator copied this file in; it is not
+// shared with any other app. The web components file loads it from the same directory
+// and finds it at window.embedKits[<this file's URL>], so two apps' kits on one
+// dashboard never replace each other.
 //
 // Every call takes the card element (`host`) and reads its data-up.
 

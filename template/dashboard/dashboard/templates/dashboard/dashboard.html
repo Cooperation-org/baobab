@@ -1,6 +1,6 @@
 {% extends "dashboard/base.html" %}
 {% load static dashboard_tags %}
-{% block title %}{{ title }} · {{ org.name }}{% endblock %}
+{% block title %}{{ title }} · {{ site_name }}{% endblock %}
 {% block content %}
 <h1 class="dash-title">{{ title }}</h1>
 <dashboard-grid data-up="{{ request.scheme }}://{{ request.get_host }}" data-dashboard="{{ dashboard }}">
@@ -9,7 +9,7 @@
     <div class="card-header">
       <span class="card-title">{{ c.title }}</span>
     </div>
-    {% if c.template %}{% include c.template %}{% else %}{% element_card c org %}{% endif %}
+    {% if c.template %}{% include c.template %}{% else %}{% element_card c %}{% endif %}
   </section>
   {% endfor %}
 </dashboard-grid>
