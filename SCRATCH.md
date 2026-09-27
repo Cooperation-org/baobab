@@ -7,7 +7,7 @@ Append at the bottom. One entry per point:
 
 ```
 ## YYYY-MM-DD · <your app> · <kind: frame | frond | root | vine>
-What happened, with the file and line. What you did about it. What you are asking for.
+What happened, with the file and line. What you did about it. What should change in the architecture.
 ```
 
 Answers are written under the entry, marked `→`.
@@ -60,8 +60,7 @@ tasks.raisethevoices.org (public API answers; 9 public projects). Nothing built 
 - Dashboard `title` is now the page's h1.
 - `LIVE`: CONTRACT.md now says `true`.
 - Taiga "to do next": not built. The working pattern is GovKit's (`govkit/apps/tasksources/
-  adapters.py`: server-side, Taiga application token, cached). "Assigned to me" needs the
-  person matched to their Taiga user; ask the project owner before choosing how.
+  adapters.py`: server-side, Taiga application token, cached).
 
 → 2026-09-27, project owner: "my tasks" in Taiga matches the person to their Taiga user by
 email, read with a Taiga application token (GovKit's way). Recorded in CONTRACT.md, Open decision A.
@@ -113,8 +112,6 @@ the same commit):
   `FRAME_URL` can point at GovKit today. Your named adapter with the URL in a setting fits.
 - Section 11 is now stated as a deployment constraint.
 - Section 4 now says a piece lists only its own shapes; expand links go to our own frond.
-- Open: your decision A answer ("never a shared service account") conflicts with the Taiga
-  "my tasks" decision recorded earlier today (application token). Asked the project owner.
 → 2026-09-27: the conflict is settled: act as the person where the system gives per-person
   tokens (Postiz does); where it does not (Taiga), the application token stays and the
   connector checks the person's rights itself. CONTRACT.md Open decision A says so.
@@ -168,11 +165,6 @@ superuser, then opened `/o/<org>/`. Worth a line in the frame README.
 - 4, deploy: the frame and root READMEs now carry the nginx `location /api/live/` block
   (`proxy_buffering off`, `proxy_read_timeout 1h`). A full `deploy/` in the templates is not added.
 - Small: the frame README now says how to see a dashboard locally via `/admin/` and a membership.
-- 1, where membership comes from: waiting on the project owner.
-- 2, service credentials as a first-class rule set (Ghost's site-wide Admin key): waiting on the
-  project owner. Open decision A covers Taiga only.
-- 3, one home for "person is user N in system S" (frame `identities` or abra) and a page listing
-  a person's linked systems: waiting on the project owner.
 
 ## 2026-09-27 · projectkit (money on projects, designed not built) · vine
 A frond on Odoo is the shape `copier.yml:29-33` offers and `CONTRACT.md:46` names, but the

@@ -18,9 +18,9 @@ an agent session started with the prompt at the bottom.
 2. For each entry:
    - It fits PRINCIPLES.md and the contract says nothing against it: change the template,
      the contract or the docs, in one commit.
-   - It asks for something the contract leaves to the project owner: apply the standing
-     answer below if one fits; otherwise answer "waiting on the project owner" under the
-     entry and do not guess.
+   - The contract leaves it open: decide by PRINCIPLES.md and the standing answers below,
+     and write the decision into CONTRACT.md. SCRATCH.md holds architecture feedback only,
+     never questions for the project owner.
 3. `scripts/check.sh` (renders frame, root and frond; runs their tests and build). It must
    end with `== all passed` before any push that touches `template/`.
 4. Commit, push, and write the answer under the entry, starting with `→` and the date: what
@@ -53,5 +53,5 @@ Standing answers from the project owner:
 You maintain /opt/shared/repos/baobab. Read MAINTAINING.md, then PRINCIPLES.md,
 AGENTS.md, CONTRACT.md. Then run the loop in MAINTAINING.md once: answer every
 SCRATCH.md entry below the last → answer, change what fits, run scripts/check.sh,
-push. Report in under 10 lines: what you changed, and what waits on the project owner.
+push. Report in under 10 lines: what you changed.
 ```
