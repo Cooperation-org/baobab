@@ -94,3 +94,12 @@ Asking for: say that in section 11 as a deployment constraint, not a footnote.
 the full app for one step is a third-party system we run (Postiz's own composer), its URL
 shapes are not ours to keep stable. Doing: expand links point at our frond only. Asking
 for: a line saying a piece lists only its own shapes.
+
+→ Open decision A, answered by the project owner 2026-09-27: **as the signed-in person.**
+A root holding a vine exchanges the person's login for the system's own token; it never
+acts as a shared service account. Two things that follow, from the systems we are using:
+Postiz takes a generic OIDC provider (`POSTIZ_GENERIC_OAUTH` and the `POSTIZ_OAUTH_*`
+settings) and issues per-person OAuth2 tokens to third-party apps, so this holds for it
+without an exception. listmonk authenticates with one admin API user and cannot; it is
+reached only as a channel inside Postiz, which holds that credential itself, so the
+boundary stays clean and no exception is needed.
