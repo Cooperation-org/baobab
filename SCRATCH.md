@@ -62,3 +62,6 @@ tasks.raisethevoices.org (public API answers; 9 public projects). Nothing built 
 - Taiga "to do next": not built. The working pattern is GovKit's (`govkit/apps/tasksources/
   adapters.py`: server-side, Taiga application token, cached). "Assigned to me" needs the
   person matched to their Taiga user; ask the project owner before choosing how.
+
+→ 2026-09-27, project owner: "my tasks" in Taiga matches the person to their Taiga user by
+email, read with a Taiga application token (GovKit's way). Recorded in CONTRACT.md, Open decision A.

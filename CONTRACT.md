@@ -245,6 +245,9 @@ The frame's log says why a card was left out of a dashboard.
   plugin does at login) or as a service account that checks the person's rights itself.
   LinkedTrust access tokens are JWTs any service can verify from JWKS: issuer, subject,
   `client_id`, 1 hour (`trust_claim_backend/src/lib/oidc.ts:216-229`).
+  Decided 2026-09-27 for "my tasks" in Taiga: match the signed-in person to their Taiga user
+  by email, reading with a Taiga application token (GovKit's way,
+  `govkit/apps/tasksources/adapters.py`).
 - **B.** `AUTH_PROVIDERS` beyond LinkedTrust. The LinkedTrust sign-in page is per client
   (`/sso/<clientId>`, `oidcApi.ts:145-150`), but the client record has no list of providers
   (`trust_claim_backend/prisma/schema.prisma:334-345`). Showing only chosen providers
