@@ -1,7 +1,0 @@
-{
-  "title": "Home",
-  "roles": [],
-  "cards": [
-    {"id": "apps", "w": 12, "title": "Apps", "template": "frame/cards/apps.html"}
-  ]
-}

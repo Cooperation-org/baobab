@@ -1,0 +1,42 @@
+@import "tailwindcss";
+@import "shadcn/tailwind.css";
+
+/* Every color and font reads a --theme-* variable, which the dashboard app's THEME_CSS may
+   set. The fallbacks are GovKit's --gk-* values. */
+@theme inline {
+  --font-sans: var(--theme-font-body, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+  --font-heading: var(--theme-font-head, Charter, "Bitstream Charter", "Iowan Old Style", Georgia, Cambria, serif);
+  --font-mono: var(--theme-font-mono, ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace);
+
+  --color-background: var(--theme-bg, #faf9f6);
+  --color-foreground: var(--theme-ink, #26221c);
+  --color-card: var(--theme-surface, #fffefb);
+  --color-card-foreground: var(--theme-ink, #26221c);
+  --color-popover: var(--theme-surface, #fffefb);
+  --color-popover-foreground: var(--theme-ink, #26221c);
+  --color-primary: var(--theme-accent, #007fa3);
+  --color-primary-foreground: var(--theme-on-accent, #ffffff);
+  --color-secondary: var(--theme-neutral-soft, #edeae3);
+  --color-secondary-foreground: var(--theme-ink, #26221c);
+  --color-muted: var(--theme-neutral-soft, #edeae3);
+  --color-muted-foreground: var(--theme-muted, #8a8378);
+  --color-accent: var(--theme-neutral-soft, #edeae3);
+  --color-accent-foreground: var(--theme-ink, #26221c);
+  --color-destructive: var(--theme-bad, #b03a44);
+  --color-border: var(--theme-border, #e6e1d8);
+  --color-input: var(--theme-border-strong, #cbc4b6);
+  --color-ring: var(--theme-accent, #007fa3);
+
+  --radius-sm: var(--theme-radius, 6px);
+  --radius-md: var(--theme-radius, 6px);
+  --radius-lg: var(--theme-radius-card, 10px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background font-sans text-foreground;
+  }
+}

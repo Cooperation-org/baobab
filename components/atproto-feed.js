@@ -24,10 +24,10 @@
     s.textContent = [
       'atproto-feed { display: block; }',
       'atproto-feed ul { list-style: none; margin: 0; padding: 0; }',
-      'atproto-feed li { padding: 8px 0; border-top: 1px solid var(--bb-border, #e6e1d8); }',
+      'atproto-feed li { padding: 8px 0; border-top: 1px solid var(--theme-border, #e6e1d8); }',
       'atproto-feed li:first-child { border-top: 0; }',
-      'atproto-feed .af-text { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--bb-ink, #26221c); }',
-      'atproto-feed .af-date { font-size: 12px; color: var(--bb-muted, #8a8378); text-decoration: none; }',
+      'atproto-feed .af-text { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--theme-ink, #26221c); }',
+      'atproto-feed .af-date { font-size: 12px; color: var(--theme-muted, #8a8378); text-decoration: none; }',
     ].join('\n');
     document.head.appendChild(s);
   }

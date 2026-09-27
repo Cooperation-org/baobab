@@ -7,9 +7,9 @@ kind:
   type: str
   help: What are you building?
   choices:
-    "frame: where people land (sign-in, orgs, nav, dashboards)": frame
-    "frond: a front end for one job, with cards": frond
-    "root: a new backend for a frond": root
+    "dashboard: where people land (sign-in, orgs, nav, dashboards)": dashboard
+    "frontend: a React app for one job, with web components for dashboards": frontend
+    "backend: a Django API for a frontend, for data no existing system holds": backend
 
 slug:
   type: str
@@ -24,9 +24,9 @@ name:
 
 backend:
   type: str
-  help: Where does this frond's data live?
-  when: "{{ kind == 'frond' }}"
+  help: Where does this frontend's data live?
+  when: "{{ kind == 'frontend' }}"
   choices:
-    "a new root (Django API made from this template)": root
-    "an existing system (Taiga, Odoo, anything with OIDC and an API): a vine": vine
-  default: root
+    "a new backend (Django API made from this template)": new
+    "an existing system (Taiga, Odoo, anything with OIDC and an API)": existing
+  default: new

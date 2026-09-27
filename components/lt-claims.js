@@ -28,13 +28,13 @@
     s.textContent = [
       'lt-claims { display: block; }',
       'lt-claims ul { list-style: none; margin: 0; padding: 0; }',
-      'lt-claims li { padding: 8px 0; border-top: 1px solid var(--bb-border, #e6e1d8); }',
+      'lt-claims li { padding: 8px 0; border-top: 1px solid var(--theme-border, #e6e1d8); }',
       'lt-claims li:first-child { border-top: 0; }',
       'lt-claims .lt-head { display: flex; gap: 8px; align-items: baseline; }',
-      'lt-claims .lt-subject { font-weight: 600; color: var(--bb-ink, #26221c); text-decoration: none; }',
-      'lt-claims .lt-verb { color: var(--bb-muted, #8a8378); font-size: 12px; }',
-      'lt-claims .lt-date { margin-left: auto; color: var(--bb-muted, #8a8378); font-size: 12px; white-space: nowrap; text-decoration: none; }',
-      'lt-claims .lt-statement { margin: 2px 0 0; color: var(--bb-ink-2, #5d574d); overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }',
+      'lt-claims .lt-subject { font-weight: 600; color: var(--theme-ink, #26221c); text-decoration: none; }',
+      'lt-claims .lt-verb { color: var(--theme-muted, #8a8378); font-size: 12px; }',
+      'lt-claims .lt-date { margin-left: auto; color: var(--theme-muted, #8a8378); font-size: 12px; white-space: nowrap; text-decoration: none; }',
+      'lt-claims .lt-statement { margin: 2px 0 0; color: var(--theme-ink-2, #5d574d); overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }',
     ].join('\n');
     document.head.appendChild(s);
   }

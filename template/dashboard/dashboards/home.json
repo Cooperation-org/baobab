@@ -1,0 +1,7 @@
+{
+  "title": "Home",
+  "roles": [],
+  "cards": [
+    {"id": "apps", "w": 12, "title": "Apps", "template": "dashboard/cards/apps.html"}
+  ]
+}

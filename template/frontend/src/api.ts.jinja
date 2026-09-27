@@ -1,0 +1,47 @@
+{% if backend == 'new' -%}
+import { API_URL } from "@/config"
+{%- else -%}
+import { API_URL, SIGNIN_URL } from "@/config"
+{%- endif %}
+
+{% if backend == 'new' -%}
+function signIn(): void {
+  location.assign(`${API_URL}/auth/login/?next=${encodeURIComponent(location.href)}`)
+}
+{%- else -%}
+// The system's own login page, which runs its own LinkedTrust sign-in (Odoo:
+// auth_oauth), then comes back here.
+function signIn(): void {
+  if (!SIGNIN_URL) throw new Error("401 and VITE_SIGNIN_URL is not set.")
+  location.assign(SIGNIN_URL + encodeURIComponent(location.href))
+}
+{%- endif %}
+
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(API_URL + path, { credentials: "include", ...init })
+  if (response.status === 401) {
+    signIn()
+    // The page is leaving for sign-in; nothing should render an error meanwhile.
+    return new Promise<T>(() => {})
+  }
+  if (!response.ok) {
+    throw new Error(`${init?.method ?? "GET"} ${path}: ${response.status}`)
+  }
+  return response.status === 204 ? (undefined as T) : response.json()
+}
+
+export function getJSON<T>(path: string): Promise<T> {
+  return request<T>(path)
+}
+
+export function send<T>(
+  method: "POST" | "PUT" | "PATCH" | "DELETE",
+  path: string,
+  body?: unknown
+): Promise<T> {
+  return request<T>(path, {
+    method,
+    headers: { "Content-Type": "application/json", "X-Embed": "1" },
+    body: body === undefined ? undefined : JSON.stringify(body),
+  })
+}

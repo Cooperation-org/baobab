@@ -11,10 +11,10 @@
      "attributes": {"data-up": "AT Proto app view", "data-actor": "handle or DID", "data-limit": "default 5", "data-replies": "yes to include replies", "data-refresh": "seconds, default 120"},
      "reads": ["app.bsky.feed.getAuthorFeed"]},
 
-    {"tag": "baobab-grid", "src": "frame: /static/embed/grid.js; GovKit: https://dash.workers.vc/static/embed/grid.js", "what": "Holds a page's cards; each person arranges them; saved per person", "signin": true, "contract": true,
-     "attributes": {"data-up": "the frame", "data-dashboard": "which saved layout", "children": "data-card, data-w (1-12), data-autohide, data-tool"}},
-    {"tag": "baobab-nav", "src": "frame: /static/embed/nav.js", "what": "The frame's bar with an account menu", "signin": false, "contract": true,
-     "attributes": {"data-up": "the frame (default: the one that served the script)"}},
+    {"tag": "dashboard-grid", "src": "dashboard template: /static/embed/grid.js. GovKit has its own copy as <baobab-grid> at https://dash.workers.vc/static/embed/grid.js", "what": "Holds a page's cards; each person arranges them; saved per person", "signin": true, "contract": true,
+     "attributes": {"data-up": "the dashboard app", "data-dashboard": "which saved layout", "children": "data-card, data-w (1-12), data-autohide, data-tool"}},
+    {"tag": "site-nav", "src": "dashboard template: /static/embed/nav.js", "what": "The dashboard app's bar with an account menu", "signin": false, "contract": true,
+     "attributes": {"data-up": "the dashboard app (default: the one that served the script)"}},
     {"tag": "cohort-nav", "src": "https://workers.vc/static/embed/cohort-nav.js", "what": "The workers.vc bar", "signin": false, "contract": true,
      "attributes": {"data-org": "", "data-current": "", "data-site-url": "", "data-org-name": "", "data-vc-org": "", "data-chat-url": "", "data-calendar-url": ""}},
 

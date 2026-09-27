@@ -1,0 +1,21 @@
+{% extends "dashboard/base.html" %}
+{% load static dashboard_tags %}
+{% block title %}{{ title }} · {{ org.name }}{% endblock %}
+{% block content %}
+<h1 class="dash-title">{{ title }}</h1>
+<dashboard-grid data-up="{{ request.scheme }}://{{ request.get_host }}" data-dashboard="{{ dashboard }}">
+  {% for c in cards %}
+  <section class="card" data-card="{{ c.id }}" data-w="{{ c.w }}" data-autohide>
+    <div class="card-header">
+      <span class="card-title">{{ c.title }}</span>
+    </div>
+    {% if c.template %}{% include c.template %}{% else %}{% element_card c org %}{% endif %}
+  </section>
+  {% endfor %}
+</dashboard-grid>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'embed/grid.js' %}" defer></script>
+{% for s in scripts %}<script src="{{ s }}" defer></script>
+{% endfor %}
+{% endblock %}
