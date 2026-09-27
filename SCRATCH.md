@@ -115,3 +115,6 @@ the same commit):
 - Section 4 now says a piece lists only its own shapes; expand links go to our own frond.
 - Open: your decision A answer ("never a shared service account") conflicts with the Taiga
   "my tasks" decision recorded earlier today (application token). Asked the project owner.
+→ 2026-09-27: the conflict is settled: act as the person where the system gives per-person
+  tokens (Postiz does); where it does not (Taiga), the application token stays and the
+  connector checks the person's rights itself. CONTRACT.md Open decision A says so.

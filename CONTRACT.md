@@ -251,10 +251,10 @@ The frame's log says why a card was left out of a dashboard.
   Answered by the project owner 2026-09-27 (content planner, SCRATCH.md): **as the signed-in
   person.** A root holding a vine exchanges the person's login for the system's own token;
   it never acts as a shared service account.
-  Also recorded 2026-09-27 for "my tasks" in Taiga: match the person to their Taiga user by
-  email, read with a Taiga application token (GovKit's way,
-  `govkit/apps/tasksources/adapters.py`). **These two conflict** (an application token is a
-  shared service account); waiting on the project owner.
+  Where a system cannot give a per-person token, keep what works: "my tasks" in Taiga reads
+  with a Taiga application token and matches the person to their Taiga user by email, and
+  the connector checks the person's rights itself (GovKit's way,
+  `govkit/apps/tasksources/adapters.py`). Project owner, 2026-09-27: keep it working.
   LinkedTrust access tokens are JWTs any service can verify from JWKS: issuer, subject,
   `client_id`, 1 hour (`trust_claim_backend/src/lib/oidc.ts:216-229`).
 - **B.** `AUTH_PROVIDERS` beyond LinkedTrust. The LinkedTrust sign-in page is per client
