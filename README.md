@@ -1,55 +1,57 @@
 # baobab
 
-Templates for adding functionality to startups with single sign-on and shared context: the
-project owner's words, "components with a single sign-in, able to talk to each other's APIs
-through connectors, and configurable front ends for the user, because different people want
-different views." The front end is malleable; the back end is compatible and consistent.
+Templates and rules for building on a single sign-on, in the project owner's words:
 
-GovKit (`dash.workers.vc`) is the working example of these rules and the dashboard for
-workers.vc. It does not change to fit this repo.
+- "The top level thing is a single sign-on."
+- "Different backends, including existing open source, making it easy to start a new project
+  that either fits in an existing dashboard system or a new project that has its own
+  dashboard and multiple components."
+- "Web components that are tightly tied to their back end but are malleable in terms of what
+  the user sees."
+- "The configurable nav bar so that a human can have a single view into everything that they
+  want to interact with that might include existing other systems."
+- "An AI agent that has the context of all the different systems." That is amebo.
+- "We're trying to help people work together better."
 
-Read: [PRINCIPLES.md](PRINCIPLES.md), then [CONTRACT.md](CONTRACT.md). Agents:
-[AGENTS.md](AGENTS.md). Web components that exist: [COMPONENTS.md](COMPONENTS.md), running at
-https://demos.linkedtrust.us/baobab/components/.
+GovKit (`dash.workers.vc`) is the dashboard for workers.vc. It does not change to fit this repo.
+
+Read [CONTRACT.md](CONTRACT.md). Agents: [AGENTS.md](AGENTS.md). Web components that exist:
+[COMPONENTS.md](COMPONENTS.md), running at https://demos.linkedtrust.us/baobab/components/.
 
 ## Pick one
 
-| You are building | Pick | You get |
-|---|---|---|
-| A front end for one job (tasks, planning, money) whose web components show on a dashboard | **frontend** | React app + a web components file |
-| The API a frontend needs, when no existing system has the data | **backend** | Django API |
-| Where people land (sign-in, orgs, nav, dashboards) for a community outside workers.vc | **dashboard** | Django app |
-
-For workers.vc startups, build a frontend (and a backend if needed) and show it on GovKit's
-dashboard. A frontend over Taiga, Odoo or another system with OIDC and an API needs no new
-backend: pick **frontend**, then "an existing system".
-
-An app that already exists with its own pages joins by
-[CONTRACT.md section 12](CONTRACT.md#12-bringing-an-existing-app-in).
+| You are building | Pick |
+|---|---|
+| A system with its own data and web components (tasks, planning, money) | **backend** |
+| A dashboard and nav bar for a community outside workers.vc | **dashboard** |
 
 ```
 uvx copier copy --trust gh:Cooperation-org/baobab my-app
 ```
 
+An existing system (Odoo, Taiga, an app not made from these templates) joins by
+[CONTRACT.md section 12](CONTRACT.md#12-bringing-an-existing-system-in).
+
 ## How they fit
 
 ```
-          LinkedTrust sign-in (OIDC)
-                   │
-   ┌───────────────┼──────────────────┐
-   ▼               ▼                  ▼
-dashboard ──► frontend's ──reads──► backend (new data)
-(GovKit, or   web components   or   existing system (Taiga, Odoo)
- this one)
+                LinkedTrust sign-in
+                        │
+     ┌──────────────────┼───────────────────┐
+     ▼                  ▼                   ▼
+ dashboard app      backend A            existing system
+ nav bar, layouts   + its web            (CRM, Taiga)
+ arranges ─────────► components          + its web components
+ components ──────────────────────────────►
+                                   amebo: tools across all of them
 ```
 
-Nothing points back up: a frontend does not know which dashboard shows it; a backend does not
-know which frontend reads it.
+A web component talks only to its own backend. Backends do not call each other; records
+refer to each other by URL, and amebo does work across systems.
 
 ## Status
 
-`scripts/check.sh` generates all three and runs their tests and build; it passes. Built on
-them: VolKit (Raise-the-Voices/volkit, a dashboard, deployed, not yet reachable by people).
-Not tested yet: CONTRACT.md, "Not tested".
+`scripts/check.sh` generates both templates and runs their tests; it passes. VolKit
+(Raise-the-Voices/volkit) was made from an earlier dashboard template.
 
 Keeping the templates right: [MAINTAINING.md](MAINTAINING.md).

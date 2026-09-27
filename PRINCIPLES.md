@@ -11,11 +11,12 @@
 
 | Element | Keeps safe |
 |---|---|
-| **One home per fact.** The dashboard app owns people, orgs, the nav and layouts. A backend or an existing system owns its data. A frontend owns only its screens. | boundaries |
-| **Nothing points up.** A frontend does not know which dashboard shows it; a backend does not know which frontend reads it. | separation, extensible |
-| **Standards between pieces, not shared code.** OIDC, HTTP + JSON, CORS, custom elements, server-sent events. | extensible, a good citizen |
+| **One home per fact.** Each backend, ours or existing, owns its data and who may see it. The dashboard app owns only the nav and layouts. | boundaries |
+| **Nothing points up.** A web component does not know which dashboard shows it; backends do not know about each other. | separation, extensible |
+| **Standards between pieces, not shared code.** OIDC, HTTP + JSON, CORS, custom elements, URLs. | extensible, a good citizen |
 | **Existing systems stay the record.** We connect; we do not copy or replace. | a good citizen, boundaries |
 | **Every cross-piece address is a setting. Unset means off, never broken.** | malleable |
+| **Records are referred to by URL.** The system that owns a record decides who may open it. | boundaries |
 | **One sign-in.** Moving between pieces never asks the person to log in again. | experience |
 | **One account per person.** A sign-in joins the existing account with the same email. Ease for existing users comes first. | experience |
 | **A card with nothing to show hides.** No placeholders, no errors on someone else's page. | experience |

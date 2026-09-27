@@ -26,7 +26,7 @@ Load from `https://demos.linkedtrust.us/baobab/components/<file>`.
 |---|---|---|---|---|
 | `<dashboard-grid>` | Holds a page's cards; each person drags, resizes, hides, sees one at a time; saved per person | dashboard template: `/static/embed/grid.js` | `data-up`, `data-dashboard`; children `data-card`, `data-w`, `data-autohide`, `data-tool` | yes |
 | `<baobab-grid>` | GovKit's copy of the same grid, on GovKit's API | `dash.workers.vc/static/embed/grid.js` | as above | yes |
-| `<site-nav>` | The dashboard app's bar, places filtered per viewer, account menu with Sign out | dashboard template: `/static/embed/nav.js` | `data-up` (default: the app that served it) | yes |
+| `<site-nav>` | The nav bar: every place a person works, including existing systems; account menu with Sign out | dashboard template: `/static/embed/nav.js` | `data-up` (default: the app that served it) | yes |
 | `<cohort-nav>` | The workers.vc bar (reads GovKit `accounts/me`) | `workers.vc/static/embed/cohort-nav.js` | `data-org`, `data-current`, `data-site-url`, `data-org-name`, `data-vc-org`, `data-chat-url`, `data-calendar-url` | yes; builds hosts from its domain |
 
 ## Org, equity and tasks (GovKit)
