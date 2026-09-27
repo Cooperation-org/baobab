@@ -23,6 +23,7 @@ Read [CONTRACT.md](CONTRACT.md). Agents: [AGENTS.md](AGENTS.md). Web components 
 | You are building | Pick |
 |---|---|
 | A system with its own data and web components (tasks, planning, money) | **backend** |
+| Views into a service that has an API and a key but no sign-in (Mobilize) | **backend**, as a layer over its API ([CONTRACT.md section 12](CONTRACT.md#12-bringing-an-existing-system-in)) |
 | A dashboard and nav bar for a community outside workers.vc | **dashboard** |
 
 ```

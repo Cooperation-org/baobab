@@ -7,7 +7,7 @@ dashboard for workers.vc; it is not changed to fit this document.
 
 | Piece | Is | Owns |
 |---|---|---|
-| **backend** | a system with its own data: one made from the backend template, or an existing one (Odoo CRM, Taiga, any open source tool that signs in with OIDC) | its data, who may see it, and its own web components |
+| **backend** | a system with its own data: one made from the backend template, an existing one (Odoo CRM, Taiga, any open source tool that signs in with OIDC), or a layer over a service's API (section 12) | its data, who may see it, and its own web components |
 | **dashboard app** | where a person lands. GovKit, or one made from the dashboard template | sign-in ids, the nav bar, dashboards, each person's layout |
 | **amebo** | the agent | knows every system and acts across them (section 3) |
 
@@ -133,11 +133,13 @@ settings use its slug as prefix (`PLANNER_…`).
 
 A setting that is unset turns its feature off. It never means a broken page.
 
-## 11. Same site
+## 11. Where pieces run
 
-Web components send cookies with their fetches, so a dashboard and the backends whose
-components it shows answer on one registrable domain (as `*.workers.vc` does). Links (section
-3) have no such limit.
+Any piece runs on any server. Web components send the viewer's cookies with their fetches,
+and browsers do not send cookies across registrable domains, so a dashboard and the backends
+whose components it shows answer on one registrable domain (as `*.workers.vc` does). That is a
+DNS name, not a server: `tasks.workers.vc` can point anywhere. Links (section 3) have no such
+limit.
 
 ## 12. Bringing an existing system in
 
@@ -152,6 +154,19 @@ by meeting these rules, not by being rebuilt:
    `template/backend/api/static/embed/kit.js`. Whoever runs the dashboard adds it under Apps.
 4. **Links:** a "Links" section in its README (section 4).
 5. **The nav bar**, if it wants to look like one place: load `<site-nav>` (section 6).
+
+A service with an API but no LinkedTrust sign-in (Mobilize, Ghost) joins through a backend
+that is a layer over its API:
+
+- The service's API key is in that backend's settings. It never reaches a page.
+- People sign in to the layer with LinkedTrust. The layer decides, per person, which views
+  of the service they get (its own roles); the key alone never decides.
+- The service stays the record. The layer may cache reads; it keeps no copy as its own data.
+- A write to the service records who asked for it (section 3).
+- Its web components talk to the layer, never to the service.
+
+The layer calling the service it wraps is not one backend calling another (section 3).
+VolKit's Ghost cards are this.
 
 ## 13. When a card shows nothing
 
