@@ -1,8 +1,9 @@
 # baobab
 
-Templates for adding functionality to startups with single sign-on and shared context. The
-front end is malleable and modifiable; the back end is compatible and consistent. Web
-components compose into dashboards.
+Templates for adding functionality to startups with single sign-on and shared context: the
+project owner's words, "components with a single sign-in, able to talk to each other's APIs
+through connectors, and configurable front ends for the user, because different people want
+different views." The front end is malleable; the back end is compatible and consistent.
 
 GovKit (`dash.workers.vc`) is the working example of these rules and the dashboard for
 workers.vc. It does not change to fit this repo.
