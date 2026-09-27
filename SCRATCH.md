@@ -173,3 +173,48 @@ superuser, then opened `/o/<org>/`. Worth a line in the frame README.
   project owner. Open decision A covers Taiga only.
 - 3, one home for "person is user N in system S" (frame `identities` or abra) and a page listing
   a person's linked systems: waiting on the project owner.
+
+## 2026-09-27 · projectkit (money on projects, designed not built) · vine
+A frond on Odoo is the shape `copier.yml:29-33` offers and `CONTRACT.md:46` names, but the
+generated code stops at the door: `template/frond/src/api.ts.jinja:11-13` makes `signIn()`
+throw for `backend == "vine"`, so the one thing a vine must do on a 401 is the one thing the
+template leaves as a placeholder. Odoo's answer is concrete and the same for every Odoo
+install: send the person to `/web/login?redirect=<current>` on the vine's own host, which
+then runs whatever OIDC that Odoo has (on `crm.linkedtrust.us`, `auth_oauth` with a
+LinkedTrust provider row, already installed). I wrote the redirect into the projectkit design
+rather than the template. Ask: ship a documented vine sign-in for a system that logs in with
+a session cookie — either that redirect as the default, or a `VITE_SIGNIN_URL` setting with
+the redirect as its convention — so every vine after this one does not re-invent it.
+
+## 2026-09-27 · projectkit · vine
+Nothing says where a vine's cards come from. `CONTRACT.md:49-79` has cards shipped by a frond
+at `embed/<slug>.js` with `kit.js` copied in by the generator, and `COMPONENTS.md:63,72`
+describes an Odoo addon serving a card over Odoo's own session cookie — so the working
+precedent puts the cards inside the existing system, where the session already is, not in the
+frond's `public/`. For projectkit the cards have to be served by the Odoo addon for the same
+reason: that host is where the cookie is. Ask: say which of the two is the supported shape for
+a vine, and if it is "the vine serves the cards", say where `kit.js` comes from when there is
+no frond build to copy it in.
+
+## 2026-09-27 · projectkit · vine
+`CONTRACT.md:14` (section 14, same site) is a hard constraint on a vine and it is invisible at
+generation time. The frond, its cards and the vine must share one registrable domain or the
+session does not carry, and no CORS setting fixes it: a projectkit frond has to sit on
+`*.linkedtrust.us` next to `crm.linkedtrust.us`, and on `*.workers.vc` next to
+`crm-<slug>.workers.vc`. I put it in the projectkit design as a deployment constraint. Ask:
+have `copier` print it after generating a frond with `backend=vine`, and put it in the
+generated README's Links section, so the hostname decision is made before the app is built
+rather than after it does not work.
+
+## 2026-09-27 · projectkit · vine
+Second case for the open ask already sitting in this file ("one home for 'person is user N in
+system S'"). Money from Slack cannot be controlled without it: amebo passes
+`author_info=f"slack:{user_id}"` (`amebo/backend/src/slack_commands.py:385`) and that string
+is only prepended to the message text (`conversation_manager.py:180,195`); `Principal` is
+built for `transport="cli"` and `transport="web"` only, so `trust_gate` never runs on the
+Slack path (`amebo/backend/src/tools/registry.py:229-231`). The only identity map that exists
+is keyed by amebo login email (`viewer_identity.py`). Not asking baobab to hold it — abra
+already holds `taiga:username/<name>` on a person and `amebo/docs/BOUNDARIES.md:24-28` puts it
+there. Ask: when the standing question is answered, state the answer as a contract line that
+a root or a vine connector can rely on, because "who is acting" is now blocking a second app,
+not one.
