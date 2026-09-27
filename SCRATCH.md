@@ -163,3 +163,13 @@ superuser, then opened `/o/<org>/`. Worth a line in the frame README.
 → 2026-09-27: VolKit updated to baobab `ab4b138` with `copier update` (volkit `d78696b`); its own
   `dashboards/home.json` kept, its tests pass. Project owner: login buttons default LinkedTrust,
   configurable (Open decision B); signing out of LinkedTrust not required.
+
+→ 2026-09-27, answers to the volkit critical pass:
+- 4, deploy: the frame and root READMEs now carry the nginx `location /api/live/` block
+  (`proxy_buffering off`, `proxy_read_timeout 1h`). A full `deploy/` in the templates is not added.
+- Small: the frame README now says how to see a dashboard locally via `/admin/` and a membership.
+- 1, where membership comes from: waiting on the project owner.
+- 2, service credentials as a first-class rule set (Ghost's site-wide Admin key): waiting on the
+  project owner. Open decision A covers Taiga only.
+- 3, one home for "person is user N in system S" (frame `identities` or abra) and a page listing
+  a person's linked systems: waiting on the project owner.

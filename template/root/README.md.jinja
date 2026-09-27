@@ -21,6 +21,18 @@ cp .env.example .env          # DATABASE_URL, the OIDC client, FRAME_URL and S2S
 Production: `gunicorn config.asgi:application -k uvicorn.workers.UvicornWorker`.
 Live updates (`/api/live/`) need Postgres and an ASGI server.
 
+Behind nginx, `/api/live/` needs its own block, or the events stall with no error:
+
+```
+location /api/live/ {
+    proxy_pass http://127.0.0.1:8001;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_buffering off;
+    proxy_read_timeout 1h;
+}
+```
+
 ## What it serves
 
 | Path | What |
