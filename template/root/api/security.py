@@ -10,6 +10,7 @@ from django.conf import settings
 from django.core.cache import cache
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import BasePermission
+from rest_framework.exceptions import PermissionDenied
 
 from .models import Identity
 
@@ -27,7 +28,11 @@ class EmbedSessionAuthentication(SessionAuthentication):
 
     def enforce_csrf(self, request):
         if request.headers.get("X-Baobab") == "1":
-            return
+            sent = request.headers.get("Origin", "")
+            if sent in settings.EMBED_ORIGINS or sent == f"{request.scheme}://{request.get_host()}":
+                return
+            logging.getLogger(__name__).warning("refused: write from origin %r, %s %s", sent, request.method, request.path)
+            raise PermissionDenied("origin not allowed")
         return super().enforce_csrf(request)
 
 

@@ -18,6 +18,14 @@ cp .env.example .env          # DATABASE_URL, the OIDC client, FRAME_URL and S2S
 .venv/bin/pytest
 ```
 
+Locally, with a frame running and no OIDC client:
+
+1. The same `S2S_TOKEN` in both `.env` files; `FRAME_URL` = the frame.
+2. In the frame's admin: yourself as a member of an org, and an Identity for you
+   (issuer = `OIDC_ISSUER`, any `sub`).
+3. Here: `manage.py createsuperuser`, sign in at `/admin/`, add an Identity with the same
+   issuer and `sub`. That `sub` is how this root asks the frame for your orgs.
+
 Production: `gunicorn config.asgi:application -k uvicorn.workers.UvicornWorker`.
 Live updates (`/api/live/`) need Postgres and an ASGI server.
 

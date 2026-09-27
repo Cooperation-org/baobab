@@ -5,7 +5,7 @@ from django.test import override_settings
 from frame.auth import person_for, safe_next
 from frame.models import DashLayout, Identity, Membership, NavPlace, Org, Peer
 
-EMBED = {"HTTP_X_BAOBAB": "1"}
+EMBED = {"HTTP_X_BAOBAB": "1", "HTTP_ORIGIN": "https://cards.example"}
 
 
 @pytest.fixture
@@ -45,6 +45,16 @@ def test_cross_origin_write_without_the_header_is_refused(member):
     c = Client(enforce_csrf_checks=True)
     c.force_login(member)
     r = c.put("/api/me/layouts/home/", {"layout": {}}, content_type="application/json")
+    assert r.status_code == 403
+
+
+def test_write_with_the_header_from_an_unlisted_origin_is_refused(member):
+    from django.test import Client
+
+    c = Client(enforce_csrf_checks=True)
+    c.force_login(member)
+    r = c.put("/api/me/layouts/home/", {"layout": {}}, content_type="application/json",
+              HTTP_X_BAOBAB="1", HTTP_ORIGIN="https://elsewhere.example")
     assert r.status_code == 403
 
 
@@ -94,22 +104,15 @@ def test_live_refuses_topics_outside_your_orgs(client, member):
     assert client.get("/api/live/?topics=other/items").status_code == 403
 
 
-def test_sign_in_links_by_verified_email_then_by_id(member):
-    assert person_for({"sub": "7", "email": "A@example.com", "email_verified": True}) == member
-    assert person_for({"sub": "7", "email": "changed@example.com"}) == member
-    new = person_for({"sub": "8", "email": "b@example.com"})
-    assert new != member and not new.has_usable_password()
+def test_sign_in_finds_the_person_by_id(member):
+    first = person_for({"sub": "7", "email": "b@example.com", "email_verified": True})
+    assert person_for({"sub": "7", "email": "changed@example.com"}) == first
+    assert not first.has_usable_password()
 
 
-def test_an_unverified_email_never_takes_over_an_account(member):
-    other = person_for({"sub": "9", "email": "a@example.com"})
-    assert other != member
-
-
-def test_an_account_already_linked_is_not_linked_again(member):
-    person_for({"sub": "7", "email": "a@example.com", "email_verified": True})
-    second = person_for({"sub": "10", "email": "a@example.com", "email_verified": True})
-    assert second != member and second.username != member.username
+def test_an_email_never_takes_over_an_account(member):
+    other = person_for({"sub": "9", "email": "a@example.com", "email_verified": True})
+    assert other != member and other.username != member.username
 
 
 @override_settings(EMBED_ORIGINS=["https://planner.example"])

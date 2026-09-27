@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 
 from api.models import Identity, Item
 
-EMBED = {"HTTP_X_BAOBAB": "1"}
+EMBED = {"HTTP_X_BAOBAB": "1", "HTTP_ORIGIN": "https://cards.example"}
 URL = "/api/orgs/acme/items/"
 
 

@@ -29,7 +29,7 @@ users) is not generated. It joins by the steps in
 uvx copier copy --trust gh:Cooperation-org/baobab my-app
 ```
 
-The first question is which of the three. Everything after that has a default.
+The first question is which of the three, then a short name. Everything after that has a default.
 
 ## How they fit
 

@@ -9,6 +9,7 @@ for key, value in {
     "DATABASE_URL": "sqlite://:memory:",
     "OIDC_CLIENT_ID": "test",
     "OIDC_CLIENT_SECRET": "test",
+    "EMBED_ORIGINS": "https://cards.example",
     "ALLOWED_HOSTS": "testserver",
     "FRAME_URL": "https://frame.example",
     "S2S_TOKEN": "t0k",

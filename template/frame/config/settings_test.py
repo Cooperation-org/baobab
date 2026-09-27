@@ -9,6 +9,7 @@ for key, value in {
     "DATABASE_URL": "sqlite://:memory:",
     "OIDC_CLIENT_ID": "test",
     "OIDC_CLIENT_SECRET": "test",
+    "EMBED_ORIGINS": "https://cards.example",
     "ALLOWED_HOSTS": "testserver,frame.example",
 }.items():
     os.environ.setdefault(key, value)
