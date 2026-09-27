@@ -47,7 +47,7 @@ step, no shadow DOM, so a dashboard with ten of them loads no framework ten time
 `embed/kit.js` does the common parts (fetch with credentials, hide on failure, change
 events). It is copied into each backend, not shared.
 
-In use: GovKit's `govkit.js`, amebo's `amebo.js`, the CRM's `crm-reachout.js`.
+The ones that exist: [COMPONENTS.md](COMPONENTS.md).
 
 ### Sensitive data
 
@@ -70,9 +70,6 @@ In use: GovKit's `govkit.js`, amebo's `amebo.js`, the CRM's `crm-reachout.js`.
 
 Every piece lists its URL shapes in its README under "Links". Once published, a shape only
 gains redirects; it is never removed or reshaped.
-
-In use: Chiku `/projects/<slug>/board/<ref>`, Elm `/c/<campaignId>`, GovKit
-`/o/<org>/{pie,drops,votes,members,projects,open}/`.
 
 ## 5. Security between pieces
 
@@ -102,7 +99,7 @@ The dashboard app serves `/static/embed/theme.css`: CSS custom properties only, 
 
 ## 8. Dashboard app data
 
-Its tables are exactly these; anything else needs the project owner's OK:
+It holds only what arranging needs; data about people or work belongs in a backend:
 
 | Table | Holds |
 |---|---|

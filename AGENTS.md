@@ -31,7 +31,7 @@ there and in `components/components.json`, even when it lives in another repo.
 ## Stop and ask before
 
 - A new shared setting name or generator question.
-- A dashboard app table not in CONTRACT.md section 8.
+- A dashboard app table holding data about people or work (CONTRACT.md section 8).
 - Anything that makes one piece require another to be running.
 - Any change to a published link shape, to GovKit, or to LinkedTrust.
 

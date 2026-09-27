@@ -42,9 +42,18 @@ Endpoints, scopes and the flow: `trust_claim_backend/docs/sso-integration.md`.
 | `/api/items/` | GET the person's items (`?limit=`), POST one (`X-Embed: 1`) |
 | `/static/embed/{{ slug }}.js` | The web components: `<{{ slug }}-items data-up="<this backend>" data-limit="5">` |
 
-To show them on a dashboard app: add this backend under Apps (API = this backend's URL,
-web components file = `/static/embed/{{ slug }}.js`), put the dashboard's origin in
-`EMBED_ORIGINS` here, and add a card with `"app": "{{ slug }}"`.
+To show them on any dashboard, on the same registrable domain as this backend:
+
+1. Put the dashboard's origin in `EMBED_ORIGINS` here.
+2. On a dashboard made from the dashboard template: add this backend under Apps (API = this
+   backend's URL, web components file = `<this backend>/static/embed/{{ slug }}.js`) and a
+   card with `"app": "{{ slug }}", "tag": "{{ slug }}-items"`.
+3. On any other page (GovKit's dash, a Django template, plain HTML):
+   ```html
+   <{{ slug }}-items data-up="https://<this backend>"></{{ slug }}-items>
+   <script src="https://<this backend>/static/embed/{{ slug }}.js" defer></script>
+   ```
+   If that page sets a `Content-Security-Policy`, its `script-src` must allow this backend.
 
 ## Links
 
