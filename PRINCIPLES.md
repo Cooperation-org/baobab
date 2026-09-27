@@ -11,10 +11,10 @@
 
 | Element | Keeps safe |
 |---|---|
-| **One home per fact.** The frame owns people, orgs, the nav and layouts. A root or an existing system owns its data. A frond owns only its screens. | boundaries |
-| **Nothing points up.** A frond does not know which frame shows it; a backend does not know which frond reads it. | separation, extensible |
+| **One home per fact.** The dashboard app owns people, orgs, the nav and layouts. A backend or an existing system owns its data. A frontend owns only its screens. | boundaries |
+| **Nothing points up.** A frontend does not know which dashboard shows it; a backend does not know which frontend reads it. | separation, extensible |
 | **Standards between pieces, not shared code.** OIDC, HTTP + JSON, CORS, custom elements, server-sent events. | extensible, a good citizen |
-| **Existing systems stay the record.** We connect (vine); we do not copy or replace. | a good citizen, boundaries |
+| **Existing systems stay the record.** We connect; we do not copy or replace. | a good citizen, boundaries |
 | **Every cross-piece address is a setting. Unset means off, never broken.** | malleable |
 | **One sign-in.** Moving between pieces never asks the person to log in again. | experience |
 | **One account per person.** A sign-in joins the existing account with the same email. Ease for existing users comes first. | experience |

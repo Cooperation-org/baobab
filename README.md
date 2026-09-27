@@ -1,58 +1,54 @@
 # baobab
 
-Templates for apps that compose into one dashboard, and work on their own.
+Templates for adding functionality to startups with single sign-on and shared context. The
+front end is malleable and modifiable; the back end is compatible and consistent. Web
+components compose into dashboards.
 
-**Read first: [PRINCIPLES.md](PRINCIPLES.md).** Agents: [AGENTS.md](AGENTS.md). Components that exist: [COMPONENTS.md](COMPONENTS.md). Problems and asks: [SCRATCH.md](SCRATCH.md). Keeping it right: [MAINTAINING.md](MAINTAINING.md).
+GovKit (`dash.workers.vc`) is the working example of these rules and the dashboard for
+workers.vc. It does not change to fit this repo.
 
-Status: first version, 2026-09-26. Templates render, build and pass their tests; see "What is not done yet" in CONTRACT.md.
+Read: [PRINCIPLES.md](PRINCIPLES.md), then [CONTRACT.md](CONTRACT.md). Agents:
+[AGENTS.md](AGENTS.md). Web components that exist: [COMPONENTS.md](COMPONENTS.md), running at
+https://demos.linkedtrust.us/baobab/components/.
 
 ## Pick one
 
 | You are building | Pick | You get |
 |---|---|---|
-| The place people land: sign-in, their orgs, the nav, the dashboard | **baobab** (frame) | Django app |
-| A front end for one job (tasks, CRM, planning) that also gives the dashboard cards | **frond** | React app + a cards file |
-| The backend a frond needs, when no existing system has the data | **root** | Django API |
+| A front end for one job (tasks, planning, money) whose web components show on a dashboard | **frontend** | React app + a web components file |
+| The API a frontend needs, when no existing system has the data | **backend** | Django API |
+| Where people land (sign-in, orgs, nav, dashboards) for a community outside workers.vc | **dashboard** | Django app |
 
-A frond on a system that already exists (Taiga, Odoo, anything with OIDC and an API) needs
-no new backend: pick **frond** and answer "existing system". That connection is a **vine**.
-Its cards can read the system straight from the page only if the system accepts the
-browser's session from the dashboard's site (Odoo on the same domain does). If it takes only
-a token (Taiga), the cards read it through a small connector on the server, in the frame or
-a root (CONTRACT.md section 2, "Where a card reads from").
+For workers.vc startups, build a frontend (and a backend if needed) and show it on GovKit's
+dashboard. A frontend over Taiga, Odoo or another system with OIDC and an API needs no new
+backend: pick **frontend**, then "an existing system".
 
-**An app that already exists and has its own pages** (Chiku, Elm, a Django app with its own
-users) is not generated. It joins by the steps in
+An app that already exists with its own pages joins by
 [CONTRACT.md section 12](CONTRACT.md#12-bringing-an-existing-app-in).
 
 ```
 uvx copier copy --trust gh:Cooperation-org/baobab my-app
 ```
 
-The first question is which of the three, then a short name. Everything after that has a default.
-
 ## How they fit
 
 ```
-                 LinkedTrust (or any OIDC provider)
-                          │  one sign-in
-      ┌───────────────────┼───────────────────────┐
-      │                   │                       │
- ┌────▼─────┐        ┌────▼─────┐           ┌─────▼──────┐
- │ baobab   │ mounts │ frond    │  reads    │ root       │  a new Django API
- │ (frame)  ├───────►│ cards    ├──────────►│   or       │
- │ nav,grid,│ links  │ frond app│  or       │ vine ──────┼─► Taiga, Odoo, ...
- │ layouts  ├───────►│          ├──────────►│            │  an existing system
- └──────────┘        └──────────┘           └────────────┘
+          LinkedTrust sign-in (OIDC)
+                   │
+   ┌───────────────┼──────────────────┐
+   ▼               ▼                  ▼
+dashboard ──► frontend's ──reads──► backend (new data)
+(GovKit, or   web components   or   existing system (Taiga, Odoo)
+ this one)
 ```
 
-Nothing points back up. A frond does not know which frame shows it. A root or an existing
-system does not know which frond reads it.
+Nothing points back up: a frontend does not know which dashboard shows it; a backend does not
+know which frontend reads it.
 
-The rules both sides follow: [CONTRACT.md](CONTRACT.md).
+## Status
 
-## Where this came from
+`scripts/check.sh` generates all three and runs their tests and build; it passes. Built on
+them: VolKit (Raise-the-Voices/volkit, a dashboard, deployed, not yet reachable by people).
+Not tested yet: CONTRACT.md, "Not tested".
 
-The workers.vc composition: GovKit, Chiku (Taiga), Elm (Odoo), amebo and the workers.vc
-shell. Its current contract is `govkit/docs/COMPOSITION.md`. baobab replaces that document
-once the templates exist.
+Keeping the templates right: [MAINTAINING.md](MAINTAINING.md).

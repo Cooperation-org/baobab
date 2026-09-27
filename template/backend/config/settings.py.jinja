@@ -104,7 +104,7 @@ from corsheaders.defaults import default_headers  # noqa: E402
 
 CORS_ALLOW_HEADERS = [*default_headers, "x-embed"]
 
-# Who is in which org is the dashboard app's fact; this backend asks it (CONTRACT.md, Open decision C).
+# Who is in which org is the dashboard app's fact; this backend asks it (CONTRACT.md section 14).
 DASHBOARD_URL = env("DASHBOARD_URL").rstrip("/")
 S2S_TOKEN = env("S2S_TOKEN")
 MEMBERSHIP_CACHE_SECONDS = 60

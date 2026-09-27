@@ -1,30 +1,22 @@
 # Maintaining baobab
 
-For whoever keeps these templates right while other people build with them: a person, or
-an agent session started with the prompt at the bottom.
-
 ## Who depends on this
 
 | What | Where | Uses |
 |---|---|---|
-| VolKit (volunteer dashboard) | Raise-the-Voices/volkit | the frame template, plus a Ghost connector and Taiga |
-| The content planner | its own repo | frond + root, delivering through Postiz |
-| The workers.vc dash | `workers.vc/dash/<org>/` | GovKit's copy of `<baobab-grid>` (see Copies) |
-| The component gallery | demos.linkedtrust.us/baobab/components/ | `components/` here |
+| VolKit | Raise-the-Voices/volkit | a copy of the dashboard template, generated before the renames and before live updates were removed |
+| The component gallery | demos.linkedtrust.us/baobab/components/ | `components/`; after changing it: `cp components/* /var/www/demos/baobab/components/` |
+
+A generated app is a copy. A template fix reaches it only by porting it by hand (same
+function, same tests) or `copier update` in that app.
 
 ## The loop
 
-1. `git pull`, then read SCRATCH.md from the last `→` answer down.
-2. For each entry:
-   - It fits PRINCIPLES.md and the contract says nothing against it: change the template,
-     the contract or the docs, in one commit.
-   - The contract leaves it open: decide by PRINCIPLES.md and the standing answers below,
-     and write the decision into CONTRACT.md. SCRATCH.md holds architecture feedback only,
-     never questions for the project owner.
-3. `scripts/check.sh` (renders frame, root and frond; runs their tests and build). It must
-   end with `== all passed` before any push that touches `template/`.
-4. Commit, push, and write the answer under the entry, starting with `→` and the date: what
-   changed, in which file.
+1. `git pull`, read SCRATCH.md.
+2. For each entry that fits PRINCIPLES.md and CONTRACT.md: change the template or the docs in
+   one commit, and delete the entry. Anything needing the project owner: leave it.
+3. `scripts/check.sh` (generates all three, runs their tests and build). It must end with
+   `== all passed` before any push that touches `template/`.
 
 Standing answers from the project owner:
 
@@ -33,25 +25,8 @@ Standing answers from the project owner:
 
 ## Copies to keep in step
 
-| Thing | Copies | How they differ |
+| Thing | Copies | Differ in |
 |---|---|---|
-| `<baobab-grid>` | `template/frame/frame/static/embed/grid.js`, `govkit/static/embed/grid.js` | API path (`/api/me/layouts/` vs `/api/v1/accounts/me/layouts/`), write header (`X-Baobab` vs `X-Govkit-Embed`), CSS variable names (`--bb-*` vs unprefixed); the frame copy also has `data-autohide`. Port a fix to both. |
-| `kit.js` | `template/frond/public/embed/kit.js`, `template/frame/frame/static/embed/kit.js` | none; copy one over the other |
-| sign-in (`auth.py`) | `template/frame/frame/auth.py`, `template/root/api/auth.py` | the login template name only |
-| `live.py` | frame and root templates | none |
-| the gallery | `components/` here, served from `/var/www/demos/baobab/components/` | after changing `components/`: `cp components/* /var/www/demos/baobab/components/` |
-
-## Where to look first
-
-- What is not built yet: CONTRACT.md, "What is not done yet".
-- Every component and its attributes: COMPONENTS.md and `components/components.json`.
-- Why a rule exists: the commit that added it (`git log -S '<phrase>' -- CONTRACT.md`).
-
-## Starting an agent session to maintain this
-
-```
-You maintain /opt/shared/repos/baobab. Read MAINTAINING.md, then PRINCIPLES.md,
-AGENTS.md, CONTRACT.md. Then run the loop in MAINTAINING.md once: answer every
-SCRATCH.md entry below the last → answer, change what fits, run scripts/check.sh,
-push. Report in under 10 lines: what you changed.
-```
+| the grid | `template/dashboard/dashboard/static/embed/grid.js`, GovKit `static/embed/grid.js` (`<baobab-grid>`) | tag, API path, write header, CSS variable names. GovKit is changed only with care. |
+| `kit.js` | `template/frontend/public/embed/kit.js`, `template/dashboard/dashboard/static/embed/kit.js` | nothing |
+| `auth.py` | `template/dashboard/dashboard/auth.py`, `template/backend/api/auth.py` | the login template name |

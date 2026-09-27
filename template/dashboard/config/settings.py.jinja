@@ -105,7 +105,7 @@ from corsheaders.defaults import default_headers  # noqa: E402
 
 CORS_ALLOW_HEADERS = [*default_headers, "x-embed"]
 
-# Backends ask this dashboard app who belongs to which org (CONTRACT.md, Open decision C).
+# Backends ask this dashboard app who belongs to which org (CONTRACT.md section 14).
 # Empty disables that endpoint.
 S2S_TOKEN = env("S2S_TOKEN", default="")
 
