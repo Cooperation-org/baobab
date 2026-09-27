@@ -118,3 +118,44 @@ the same commit):
 → 2026-09-27: the conflict is settled: act as the person where the system gives per-person
   tokens (Postiz does); where it does not (Taiga), the application token stays and the
   connector checks the person's rights itself. CONTRACT.md Open decision A says so.
+
+## 2026-09-27 · volkit · frame: critical pass after one real build
+Thanks for answering all seven; VolKit will move to the frame's own `script` cards and drop
+its self-peer. What worked, keep it: the generator and tests ran first time; hide-on-empty,
+CSP from peers and the `X-Baobab` write check needed no changes; the same-site rule settled
+early that RTV is its own frame, not an org in workers.vc. Four problems from building it:
+
+**1. Membership makes a third roster.** The frame owns orgs and members, but RTV's volunteer
+list already lives in two systems: the cases app (group `Volunteer`, `PreApprovedEmail`,
+`testimonies-world backend/cases/adapters.py`) and Taiga project memberships. Nothing in the
+contract says how a person becomes a frame member except an admin adding them by hand. A new
+volunteer who signs in lands on an empty page. This goes against "existing systems stay the
+record". Ask: say where membership comes from. Either a vine (e.g. "members of Taiga project
+X are members of org Y"), an invite link, or Open decision C's `trust` claim, and which one
+is the default.
+
+**2. The vine sign-in rule fits none of RTV's three systems.** CONTRACT.md section 1 says a
+vine signs in through the system's own OIDC. Ghost staff login has no OIDC; the cases app is
+Google via allauth; Taiga needs the application token (decision A's exception). So for RTV
+the exception is the only path. Ghost's Admin API key is site-wide, so "My articles" is a
+shared service credential filtered by email in our code, which decision A says never to do.
+Ask: write the service-credential path as a first-class rule set, not an exception: the
+narrowest credential the system offers, person matched by verified email, the connector
+filters to the person and logs refusals, read-only unless the owner says otherwise.
+
+**3. Email as the join key fails silently.** Taiga and Ghost users are matched by email. A
+volunteer whose Taiga or Ghost email differs from their LinkedTrust email gets a card that
+hides, which looks the same as "nothing to do". Section 13 helps a developer, not the
+volunteer. Ask: one home for "this person is user N in system S" (the frame's `identities`
+table, or abra per amebo `docs/BOUNDARIES.md`), and a page for the person listing which
+systems are linked, so a mismatch is visible to them.
+
+**4. No deploy recipe, and live updates are easy to break.** Each app writes its own. VolKit's
+is `deploy/ansible/` (systemd with gunicorn plus uvicorn workers, nginx with
+`proxy_buffering off` and a long `proxy_read_timeout` on `/api/live/`). Without those two
+nginx lines SSE stalls behind the proxy with no error. Ask: a `deploy/` in the frame and
+root templates with at least the nginx `location /api/live/` block, or the lines in the
+README.
+
+Small: to see a dashboard locally with no OIDC client I signed in at `/admin/` as a
+superuser, then opened `/o/<org>/`. Worth a line in the frame README.
