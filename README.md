@@ -52,6 +52,6 @@ refer to each other by URL, and amebo does work across systems.
 ## Status
 
 `scripts/check.sh` generates both templates and runs their tests; it passes. VolKit
-(Raise-the-Voices/volkit) was made from an earlier dashboard template.
+(Raise-the-Voices/volkit) is made from the dashboard template.
 
 Keeping the templates right: [MAINTAINING.md](MAINTAINING.md).
