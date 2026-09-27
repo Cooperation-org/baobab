@@ -167,7 +167,7 @@ superuser, then opened `/o/<org>/`. Worth a line in the frame README.
 - Small: the frame README now says how to see a dashboard locally via `/admin/` and a membership.
 
 ## 2026-09-27 · projectkit (money on projects, designed not built) · vine
-A frond on Odoo is the shape `copier.yml:29-33` offers and `CONTRACT.md:46` names, but the
+A frond on Odoo is the shape `copier.yml:29-33` offers and `CONTRACT.md` §2 names, but the
 generated code stops at the door: `template/frond/src/api.ts.jinja:11-13` makes `signIn()`
 throw for `backend == "vine"`, so the one thing a vine must do on a 401 is the one thing the
 template leaves as a placeholder. Odoo's answer is concrete and the same for every Odoo
@@ -179,7 +179,7 @@ a session cookie — either that redirect as the default, or a `VITE_SIGNIN_URL`
 the redirect as its convention — so every vine after this one does not re-invent it.
 
 ## 2026-09-27 · projectkit · vine
-Nothing says where a vine's cards come from. `CONTRACT.md:49-79` has cards shipped by a frond
+Nothing says where a vine's cards come from. `CONTRACT.md` §2 (:49-102) has cards shipped by a frond
 at `embed/<slug>.js` with `kit.js` copied in by the generator, and `COMPONENTS.md:63,72`
 describes an Odoo addon serving a card over Odoo's own session cookie — so the working
 precedent puts the cards inside the existing system, where the session already is, not in the
@@ -189,7 +189,7 @@ a vine, and if it is "the vine serves the cards", say where `kit.js` comes from 
 no frond build to copy it in.
 
 ## 2026-09-27 · projectkit · vine
-`CONTRACT.md:14` (section 14, same site) is a hard constraint on a vine and it is invisible at
+`CONTRACT.md` §11 (:205-210), same site, is a hard constraint on a vine and it is invisible at
 generation time. The frond, its cards and the vine must share one registrable domain or the
 session does not carry, and no CORS setting fixes it: a projectkit frond has to sit on
 `*.linkedtrust.us` next to `crm.linkedtrust.us`, and on `*.workers.vc` next to
@@ -205,8 +205,9 @@ system S'"). Money from Slack cannot be controlled without it: amebo passes
 is only prepended to the message text (`conversation_manager.py:180,195`); `Principal` is
 built for `transport="cli"` and `transport="web"` only, so `trust_gate` never runs on the
 Slack path (`amebo/backend/src/tools/registry.py:229-231`). The only identity map that exists
-is keyed by amebo login email (`viewer_identity.py`). Not asking baobab to hold it — abra
-already holds `taiga:username/<name>` on a person and `amebo/docs/BOUNDARIES.md:24-28` puts it
-there. Ask: when the standing question is answered, state the answer as a contract line that
+is keyed by amebo login email (`viewer_identity.py`). Not asking baobab to hold it — abra is
+where `amebo/docs/BOUNDARIES.md:15` puts it — though it holds no typed binding for it today:
+`taiga:username/<name>` is prose in notes and one docstring
+(`amebo/backend/src/services/viewer_identity.py:10`), and Ask: when the standing question is answered, state the answer as a contract line that
 a root or a vine connector can rely on, because "who is acting" is now blocking a second app,
 not one.
