@@ -167,7 +167,7 @@ superuser, then opened `/o/<org>/`. Worth a line in the frame README.
 - Small: the frame README now says how to see a dashboard locally via `/admin/` and a membership.
 
 ## 2026-09-27 · projectkit (money on projects, designed not built) · vine
-A frond on Odoo is the shape `copier.yml:29-33` offers and `CONTRACT.md` §2 names, but the
+A frond on Odoo is the shape `copier.yml:31` offers and `CONTRACT.md` §2 names, but the
 generated code stops at the door: `template/frond/src/api.ts.jinja:11-13` makes `signIn()`
 throw for `backend == "vine"`, so the one thing a vine must do on a 401 is the one thing the
 template leaves as a placeholder. Odoo's answer is concrete and the same for every Odoo
