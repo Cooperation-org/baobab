@@ -21,6 +21,10 @@ A vine is a choice inside a frond, not a separate app. When a vine's cards canno
 system from the browser (section 2, "Where a card reads from"), the connector code runs
 server-side in a root or in the frame; see Open decision A.
 
+A root may also hold a vine: its own data is new (a plan, a list), and it delivers through a
+system that already exists (a scheduler, a mailer). The system's credentials live in the
+root, never in the browser, and the root acts as the signed-in person (Open decision A).
+
 ## 1. Sign-in
 
 - Every piece signs in with OIDC. The issuer is configuration, default
@@ -113,7 +117,9 @@ a dashboard runs in the same page and could read it.
 ## 4. Deep links (expand targets)
 
 Every frond and root lists its URL shapes in its README under "Links". Once published, a
-shape only gains redirects; it is never removed or reshaped.
+shape only gains redirects; it is never removed or reshaped. A piece lists only its own shapes: when a
+card's work is finished in a system we run but do not own, its expand link still points
+into our own frond.
 
 Today: Chiku `/projects/<slug>/board/<ref>` (the `/p/<slug>/board?story=<ref>` shape
 redirects), Elm `/c/<campaignId>`, GovKit `/o/<org>/{pie,drops,votes,members,projects,open}/`.
@@ -198,9 +204,10 @@ means a broken page.
 
 ## 11. Same site
 
-Cards send cookies with credentialed fetches, so the frame, its fronds' cards and their
-backends sit under one registrable domain (as `*.workers.vc` does today). A deployment
-split across domains is not supported yet.
+**A deployment constraint, decided before capacity:** cards send cookies with credentialed
+fetches, so the frame, its fronds' cards and their backends must answer on one registrable
+domain (as `*.workers.vc` does today). A piece can run on any machine, but it needs a
+hostname under the frame's domain. A deployment split across domains is not supported yet.
 
 ## 12. Bringing an existing app in
 
@@ -238,24 +245,28 @@ The frame's log says why a card was left out of a dashboard.
 
 ## Open decisions
 
-- **A.** Cards over a vine system that only takes bearer tokens (Taiga). The connector runs
-  server-side in a root or the frame (today's GovKit way). A connector in a frame adds no
-  tables: it reads through, checks membership per request, and may cache for a stated time. Open: whether it reads as the
-  signed-in person (exchanging their LinkedTrust login for a system token, as the Taiga
-  plugin does at login) or as a service account that checks the person's rights itself.
+- **A.** A connector to a system that takes only tokens runs server-side, in a root or the
+  frame. A connector in a frame adds no tables: it reads through, checks membership per
+  request, and may cache for a stated time.
+  Answered by the project owner 2026-09-27 (content planner, SCRATCH.md): **as the signed-in
+  person.** A root holding a vine exchanges the person's login for the system's own token;
+  it never acts as a shared service account.
+  Also recorded 2026-09-27 for "my tasks" in Taiga: match the person to their Taiga user by
+  email, read with a Taiga application token (GovKit's way,
+  `govkit/apps/tasksources/adapters.py`). **These two conflict** (an application token is a
+  shared service account); waiting on the project owner.
   LinkedTrust access tokens are JWTs any service can verify from JWKS: issuer, subject,
   `client_id`, 1 hour (`trust_claim_backend/src/lib/oidc.ts:216-229`).
-  Decided 2026-09-27 for "my tasks" in Taiga: match the signed-in person to their Taiga user
-  by email, reading with a Taiga application token (GovKit's way,
-  `govkit/apps/tasksources/adapters.py`).
 - **B.** `AUTH_PROVIDERS` beyond LinkedTrust. The LinkedTrust sign-in page is per client
   (`/sso/<clientId>`, `oidcApi.ts:145-150`), but the client record has no list of providers
   (`trust_claim_backend/prisma/schema.prisma:334-345`). Showing only chosen providers
   means either a field on that record, or the app's own buttons.
-- **C.** How a root learns orgs and roles. Built in the templates: the frame owns them and
-  answers `GET /api/s2s/membership/?sub=&org=` to a root holding `S2S_TOKEN`; the root
-  asks on every org-scoped request, cached a minute. Later, the LinkedTrust `trust` claim
-  (`earnkit/docs/SSO-AND-TEAMS.md`, section 2).
+- **C.** How a root learns orgs and roles. Decided 2026-09-27: GovKit's shape. The frame
+  answers `GET /api/v1/accounts/s2s/identity/<provider>/<subject>/` (bearer `S2S_TOKEN`) with
+  `{display_name, email, pool, memberships: [{org_slug, org_name, role}]}`, 404 for a
+  stranger, exactly as GovKit does (`govkit/apps/accounts/api.py`, `s2s_identity`). So a
+  root's `FRAME_URL` may be a baobab frame or GovKit. The root asks, caches a minute. Later,
+  the LinkedTrust `trust` claim (`earnkit/docs/SSO-AND-TEAMS.md`, section 2).
 
 ## What is not done yet
 

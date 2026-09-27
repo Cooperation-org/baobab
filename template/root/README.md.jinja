@@ -31,7 +31,8 @@ Live updates (`/api/live/`) need Postgres and an ASGI server.
 | `/api/live/?topics=<org>/items` | Server-sent events: `{topic, type, id}` |
 
 Who is in which org is the frame's fact. Every org-scoped request asks the frame
-(`FRAME_URL/api/s2s/membership/`), cached for a minute.
+(`FRAME_URL/api/v1/accounts/s2s/identity/linkedtrust/<sub>/`, the same as GovKit answers, so
+`FRAME_URL` may be a baobab frame or GovKit), cached for a minute.
 
 ## Links
 

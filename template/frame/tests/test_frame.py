@@ -78,15 +78,14 @@ def test_dashboard_loads_scripts_only_from_peers(client, member):
 
 
 @override_settings(S2S_TOKEN="t0k")
-def test_s2s_membership(client, member):
+def test_s2s_identity_answers_like_govkit(client, member):
     Identity.objects.create(user=member, issuer="https://live.linkedtrust.us", sub="42")
-    url = "/api/s2s/membership/?sub=42&org=acme"
-    assert client.get(url).status_code == 403
-    assert client.get(url, HTTP_AUTHORIZATION="Bearer t0k").json() == {"member": True, "role": "member"}
-    assert client.get("/api/s2s/membership/?sub=42&org=other",
-                      HTTP_AUTHORIZATION="Bearer t0k").json() == {"member": False, "role": None}
-    assert client.get("/api/s2s/orgs/?sub=42", HTTP_AUTHORIZATION="Bearer t0k").json() == {
-        "orgs": [{"slug": "acme", "name": "Acme", "role": "member"}]}
+    url = "/api/v1/accounts/s2s/identity/linkedtrust/42/"
+    assert client.get(url).status_code == 401
+    got = client.get(url, HTTP_AUTHORIZATION="Bearer t0k").json()
+    assert got["memberships"] == [{"org_slug": "acme", "org_name": "Acme", "role": "member"}]
+    assert client.get("/api/v1/accounts/s2s/identity/linkedtrust/99/",
+                      HTTP_AUTHORIZATION="Bearer t0k").status_code == 404
 
 
 @override_settings(LIVE=True)

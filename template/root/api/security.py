@@ -2,6 +2,7 @@
 
 import json
 import logging
+import urllib.error
 import urllib.parse
 import urllib.request
 
@@ -30,48 +31,52 @@ class EmbedSessionAuthentication(SessionAuthentication):
         return super().enforce_csrf(request)
 
 
-def _ask_frame(path, params):
-    req = urllib.request.Request(
-        f"{settings.FRAME_URL}/api/s2s/{path}/?{urllib.parse.urlencode(params)}",
-        headers={"Authorization": f"Bearer {settings.S2S_TOKEN}"},
-    )
-    with urllib.request.urlopen(req, timeout=5) as r:
-        return json.load(r)
-
-
 def _sub(user):
     ident = Identity.objects.filter(user=user, issuer=settings.OIDC_ISSUER).first()
     return ident.sub if ident else None
 
 
-def orgs_for(user):
-    """The orgs the person is in, asked of the frame: [{slug, name, role}]."""
+def memberships(user):
+    """The person's orgs and roles, asked of the frame, cached briefly:
+    [{org_slug, org_name, role}]. The frame answers like GovKit does
+    (`/api/v1/accounts/s2s/identity/<provider>/<subject>/`), so FRAME_URL may be either."""
     sub = _sub(user)
     if sub is None:
         return []
+    key = f"memberships:{sub}"
+    hit = cache.get(key)
+    if hit is not None:
+        return hit
+    req = urllib.request.Request(
+        f"{settings.FRAME_URL}/api/v1/accounts/s2s/identity/linkedtrust/{urllib.parse.quote(sub, safe='')}/",
+        headers={"Authorization": f"Bearer {settings.S2S_TOKEN}"},
+    )
     try:
-        return _ask_frame("orgs", {"sub": sub}).get("orgs", [])
+        with urllib.request.urlopen(req, timeout=5) as r:
+            found = json.load(r).get("memberships", [])
+    except urllib.error.HTTPError as e:
+        if e.code != 404:
+            log.warning("membership check failed: %s", e)
+            return []
+        found = []
     except (OSError, ValueError) as e:
-        log.warning("org list failed: %s", e)
+        log.warning("membership check failed: %s", e)
         return []
+    cache.set(key, found, settings.MEMBERSHIP_CACHE_SECONDS)
+    return found
+
+
+def orgs_for(user):
+    return [{"slug": m["org_slug"], "name": m.get("org_name", m["org_slug"]), "role": m.get("role")}
+            for m in memberships(user)]
 
 
 def member_role(user, org):
-    """The person's role in `org`, asked of the frame, or None. Cached briefly."""
-    sub = _sub(user)
-    if sub is None:
-        return None
-    key = f"member:{sub}:{org}"
-    hit = cache.get(key)
-    if hit is not None:
-        return hit or None
-    try:
-        role = _ask_frame("membership", {"sub": sub, "org": org}).get("role")
-    except (OSError, ValueError) as e:
-        log.warning("membership check failed for org %s: %s", org, e)
-        return None
-    cache.set(key, role or "", settings.MEMBERSHIP_CACHE_SECONDS)
-    return role
+    """The person's role in `org`, or None."""
+    for m in memberships(user):
+        if m.get("org_slug") == org:
+            return m.get("role") or "member"
+    return None
 
 
 class IsOrgMember(BasePermission):

@@ -36,8 +36,8 @@ def test_signed_out_is_told_to_sign_in(client, db):
     assert client.get(URL).status_code == 401
 
 
-def test_membership_is_asked_of_the_frame(person):
-    from api.security import member_role
+def test_membership_is_asked_of_the_frame_like_govkit(person):
+    from api.security import member_role, orgs_for
 
     class Answer:
         def __enter__(self):
@@ -47,13 +47,14 @@ def test_membership_is_asked_of_the_frame(person):
             return False
 
         def read(self):
-            return b'{"member": true, "role": "admin"}'
+            return b'{"memberships": [{"org_slug": "acme", "org_name": "Acme", "role": "admin"}]}'
 
     with patch("urllib.request.urlopen", return_value=Answer()) as call:
         assert member_role(person, "acme") == "admin"
-        assert member_role(person, "acme") == "admin"
+        assert member_role(person, "other") is None
+        assert orgs_for(person) == [{"slug": "acme", "name": "Acme", "role": "admin"}]
     req = call.call_args[0][0]
-    assert req.full_url == "https://frame.example/api/s2s/membership/?sub=42&org=acme"
+    assert req.full_url == "https://frame.example/api/v1/accounts/s2s/identity/linkedtrust/42/"
     assert req.headers["Authorization"] == "Bearer t0k"
     assert call.call_count == 1
 

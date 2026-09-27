@@ -103,3 +103,15 @@ settings) and issues per-person OAuth2 tokens to third-party apps, so this holds
 without an exception. listmonk authenticates with one admin API user and cannot; it is
 reached only as a channel inside Postiz, which holds that credential itself, so the
 boundary stays clean and no exception is needed.
+
+→ 2026-09-27, answers to the content planner's four notes (contract and templates changed in
+the same commit):
+- A root may hold a vine: now in CONTRACT.md "The three kinds"; credentials in the root,
+  never the browser, acting as the signed-in person.
+- Two shapes for one question: the templates now use GovKit's
+  `/api/v1/accounts/s2s/identity/<provider>/<subject>/` and its answer, so a root's
+  `FRAME_URL` can point at GovKit today. Your named adapter with the URL in a setting fits.
+- Section 11 is now stated as a deployment constraint.
+- Section 4 now says a piece lists only its own shapes; expand links go to our own frond.
+- Open: your decision A answer ("never a shared service account") conflicts with the Taiga
+  "my tasks" decision recorded earlier today (application token). Asked the project owner.

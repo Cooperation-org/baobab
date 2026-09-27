@@ -34,7 +34,7 @@ Production: `gunicorn config.asgi:application -k uvicorn.workers.UvicornWorker`,
 | `/api/me/` | The signed-in person and their orgs |
 | `/api/me/layouts/<dashboard>/` | GET, PUT, DELETE their arrangement |
 | `/api/nav/` | The nav places this viewer sees |
-| `/api/s2s/membership/?sub=&org=` | For roots, with `Authorization: Bearer <S2S_TOKEN>` |
+| `/api/v1/accounts/s2s/identity/linkedtrust/<sub>/` | For roots, with `Authorization: Bearer <S2S_TOKEN>`: the person and their orgs. Same path and answer as GovKit |
 | `/api/live/?topics=<org>/<thing>` | Server-sent events |
 
 ## Dashboards
