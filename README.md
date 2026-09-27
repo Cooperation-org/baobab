@@ -11,6 +11,8 @@ Templates and rules for building on a single sign-on, in the project owner's wor
 - "The configurable nav bar so that a human can have a single view into everything that they
   want to interact with that might include existing other systems."
 - "An AI agent that has the context of all the different systems." That is amebo.
+- "Unified user experience most important and AI able to help across (readonly when security
+  not there, mostly write tasks chatter things like that)."
 - "We're trying to help people work together better."
 
 GovKit (`dash.workers.vc`) is the dashboard for workers.vc. It does not change to fit this repo.
@@ -23,7 +25,7 @@ Read [CONTRACT.md](CONTRACT.md). Agents: [AGENTS.md](AGENTS.md). Web components 
 | You are building | Pick |
 |---|---|
 | A system with its own data and web components (tasks, planning, money) | **backend** |
-| Views into a service that has an API and a key but no sign-in (Mobilize) | **backend**, as a layer over its API ([CONTRACT.md section 12](CONTRACT.md#12-bringing-an-existing-system-in)) |
+| Views into a remote service through its API key or its own OAuth (Mobilize) | **backend**, as a layer over its API ([CONTRACT.md section 12](CONTRACT.md#12-bringing-an-existing-system-in)) |
 | A dashboard and nav bar for a community outside workers.vc | **dashboard** |
 
 ```

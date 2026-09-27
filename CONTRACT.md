@@ -65,6 +65,8 @@ The ones that exist: [COMPONENTS.md](COMPONENTS.md).
   service identity; no credential that bypasses scope; every write records who it was done
   as. amebo generally does not contact people; it reads what it needs, and outbound
   messages wait in its approval queue.
+- **Where a system cannot tell amebo what the person may do** (one shared key, no per-person
+  permissions), amebo only reads. Its writes are mostly tasks and chatter.
 
 ## 4. Links
 
@@ -139,7 +141,8 @@ Any piece runs on any server. Web components send the viewer's cookies with thei
 and browsers do not send cookies across registrable domains, so a dashboard and the backends
 whose components it shows answer on one registrable domain (as `*.workers.vc` does). That is a
 DNS name, not a server: `tasks.workers.vc` can point anywhere. Links (section 3) have no such
-limit.
+limit. A remote system on another domain gets web components through a layer (section 12)
+on the dashboard's domain.
 
 ## 12. Bringing an existing system in
 
@@ -155,10 +158,12 @@ by meeting these rules, not by being rebuilt:
 4. **Links:** a "Links" section in its README (section 4).
 5. **The nav bar**, if it wants to look like one place: load `<site-nav>` (section 6).
 
-A service with an API but no LinkedTrust sign-in (Mobilize, Ghost) joins through a backend
-that is a layer over its API:
+A service with an API but no LinkedTrust sign-in (Mobilize, Ghost), on any domain, joins
+through a backend that is a layer over its API:
 
-- The service's API key is in that backend's settings. It never reaches a page.
+- The layer holds the service's API key, or each person's own token from the service's
+  OAuth (the person connects their account once). Either stays in the layer; it never
+  reaches a page.
 - People sign in to the layer with LinkedTrust. The layer decides, per person, which views
   of the service they get (its own roles); the key alone never decides.
 - The service stays the record. The layer may cache reads; it keeps no copy as its own data.
