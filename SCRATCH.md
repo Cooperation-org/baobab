@@ -65,3 +65,32 @@ tasks.raisethevoices.org (public API answers; 9 public projects). Nothing built 
 
 → 2026-09-27, project owner: "my tasks" in Taiga matches the person to their Taiga user by
 email, read with a Taiga application token (GovKit's way). Recorded in CONTRACT.md, Open decision A.
+
+## 2026-09-27 · content planner · frond + root
+
+**A root that is itself a vine client has no name in the contract.** The planner's root
+holds credentials for Postiz and listmonk and calls them server-side. The contract has
+frond→vine (the browser talks to the system, section 2 "Where a card reads from") and
+root as "new data that no existing system holds". This is both: our data is the plan,
+and delivery belongs to a system we run but do not own. Open decision A covers only the
+token case for cards. Asking for: a sentence in section "The three kinds" saying a root
+may hold a vine, and that the credentials live there, never in the browser.
+
+**Open decision C invents an endpoint GovKit already has in another shape.** The
+templates call `GET /api/s2s/membership/?sub=&org=`. GovKit answers the same question at
+`GET /api/v1/accounts/s2s/identity/<provider>/<subject>/` (`govkit/apps/accounts/api.py:207`),
+bearer `GOVKIT_S2S_TOKEN`, returning `memberships[]` with `org_slug` and `role`, and `404`
+for a stranger, `pool: true` for someone in no org. Two shapes for one question. Doing:
+writing the root's membership lookup as a named adapter with the URL in a setting, so
+pointing it at a frame later is config. Asking for: pick one shape, or say in the contract
+that roots carry an adapter and the frame's shape is only the default.
+
+**Section 11 decided hosting before capacity did.** Cards send cookies, so the frame, the
+fronds and their backends sit under one registrable domain. That ruled out placing this
+app anywhere that does not answer on the frame's domain, before anyone looked at memory.
+Asking for: say that in section 11 as a deployment constraint, not a footnote.
+
+**Section 4 promises link shapes we do not own.** A card expands into the full app. When
+the full app for one step is a third-party system we run (Postiz's own composer), its URL
+shapes are not ours to keep stable. Doing: expand links point at our frond only. Asking
+for: a line saying a piece lists only its own shapes.
