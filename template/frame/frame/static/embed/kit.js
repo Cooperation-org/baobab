@@ -52,28 +52,7 @@
       document.dispatchEvent(new CustomEvent(slug + ':changed', { detail: { type: type, id: id } }));
     }
 
-    // Calls onMessage({topic, type, id}) for each message on these topics.
-    // Returns a function that stops listening. A backend without live updates
-    // just never sends anything.
-    function live(host, topics, onMessage) {
-      var source;
-      try {
-        source = new EventSource(
-          up(host) + '/api/live/?topics=' + encodeURIComponent(topics.join(',')),
-          { withCredentials: true }
-        );
-      } catch (e) {
-        return function () {};
-      }
-      source.onmessage = function (event) {
-        var message;
-        try { message = JSON.parse(event.data); } catch (e) { return; }
-        if (message && topics.indexOf(message.topic) !== -1) onMessage(message);
-      };
-      return function () { source.close(); };
-    }
-
-    return { getJSON: getJSON, post: post, hide: hide, changed: changed, live: live };
+    return { getJSON: getJSON, post: post, hide: hide, changed: changed };
   }
 
   (window.baobabKits = window.baobabKits || {})[HERE] = baobabKit;

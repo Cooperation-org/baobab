@@ -12,5 +12,4 @@ urlpatterns = [
     path("auth/linkedtrust/callback", auth.Callback.as_view(), name="linkedtrust_callback"),
     path("api/me/", views.MeView.as_view()),
     path("api/orgs/<slug:org>/items/", views.ItemsView.as_view()),
-    path("api/live/", views.live_view),
 ]

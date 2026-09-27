@@ -4,17 +4,15 @@ attribute on a page is never a permission (CONTRACT.md section 5)."""
 import json
 import logging
 
-from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.contrib.auth import logout
-from django.http import HttpResponse, JsonResponse, StreamingHttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.urls import path
 from django.views.decorators.http import require_GET
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from . import live
 from .models import DashLayout, Identity, Membership, NavPlace
 from .security import s2s_authorized
 
@@ -117,29 +115,10 @@ def s2s_identity(request, provider, subject):
     })
 
 
-async def live_view(request):
-    """GET /api/live/?topics=<org>/<thing>,... as server-sent events."""
-    if not settings.LIVE:
-        return HttpResponse(status=404)
-    user = await request.auser()
-    topics = [t for t in request.GET.get("topics", "").split(",") if "/" in t]
-    if not user.is_authenticated or not topics:
-        return HttpResponse(status=403)
-    held = await sync_to_async(roles_of)(user)
-    if any(t.split("/", 1)[0] not in held for t in topics):
-        log.warning("live: %s refused topics %s", user.pk, topics)
-        return HttpResponse(status=403)
-    response = StreamingHttpResponse(live.stream(set(topics)), content_type="text/event-stream")
-    response["Cache-Control"] = "no-cache"
-    response["X-Accel-Buffering"] = "no"
-    return response
-
-
 urls = [
     path("me/", MeView.as_view()),
     path("me/layouts/<slug:dashboard>/", LayoutView.as_view()),
     path("nav/", NavView.as_view()),
     path("logout/", LogoutView.as_view()),
     path("v1/accounts/s2s/identity/<slug:provider>/<path:subject>/", s2s_identity),
-    path("live/", live_view),
 ]

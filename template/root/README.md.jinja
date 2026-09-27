@@ -14,7 +14,7 @@ from [Cooperation-org/baobab](https://github.com/Cooperation-org/baobab); the ru
 uv venv && uv pip install -r requirements.txt
 cp .env.example .env          # DATABASE_URL, the OIDC client, FRAME_URL and S2S_TOKEN
 .venv/bin/python manage.py migrate
-.venv/bin/uvicorn config.asgi:application --port 8001
+.venv/bin/python manage.py runserver 8001
 .venv/bin/pytest
 ```
 
@@ -26,20 +26,7 @@ Locally, with a frame running and no OIDC client:
 3. Here: `manage.py createsuperuser`, sign in at `/admin/`, add an Identity with the same
    issuer and `sub`. That `sub` is how this root asks the frame for your orgs.
 
-Production: `gunicorn config.asgi:application -k uvicorn.workers.UvicornWorker`.
-Live updates (`/api/live/`) need Postgres and an ASGI server.
-
-Behind nginx, `/api/live/` needs its own block, or the events stall with no error:
-
-```
-location /api/live/ {
-    proxy_pass http://127.0.0.1:8001;
-    proxy_set_header Host $host;
-    proxy_set_header X-Forwarded-Proto https;
-    proxy_buffering off;
-    proxy_read_timeout 1h;
-}
-```
+Production: `gunicorn config.wsgi:application`.
 
 ## What it serves
 
@@ -48,7 +35,6 @@ location /api/live/ {
 | `/auth/login/?next=` | Sign in, then back to `next` (a URL on an origin in `EMBED_ORIGINS`) |
 | `/api/me/` | The signed-in person |
 | `/api/orgs/<org>/items/` | GET the org's items, POST one (`X-Baobab: 1`) |
-| `/api/live/?topics=<org>/items` | Server-sent events: `{topic, type, id}` |
 
 Who is in which org is the frame's fact. Every org-scoped request asks the frame
 (`FRAME_URL/api/v1/accounts/s2s/identity/linkedtrust/<sub>/`, the same as GovKit answers, so

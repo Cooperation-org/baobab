@@ -14,27 +14,14 @@ uv venv && uv pip install -r requirements.txt
 cp .env.example .env          # then fill in DATABASE_URL and the OIDC client
 .venv/bin/python manage.py migrate
 .venv/bin/python manage.py createsuperuser
-.venv/bin/uvicorn config.asgi:application --port 8000
+.venv/bin/python manage.py runserver 8000
 .venv/bin/pytest
 ```
 
-Production: `gunicorn config.asgi:application -k uvicorn.workers.UvicornWorker`, after
-`manage.py collectstatic`. Live updates (`/api/live/`) need Postgres and an ASGI server.
+Production: `gunicorn config.wsgi:application`, after `manage.py collectstatic`.
 
 To see a dashboard locally without an OIDC client: sign in at `/admin/` as the superuser,
 add yourself as a member on an org's admin page, then open `/o/<org>/`.
-
-Behind nginx, `/api/live/` needs its own block, or the events stall with no error:
-
-```
-location /api/live/ {
-    proxy_pass http://127.0.0.1:8000;
-    proxy_set_header Host $host;
-    proxy_set_header X-Forwarded-Proto https;
-    proxy_buffering off;
-    proxy_read_timeout 1h;
-}
-```
 
 ## What it serves
 
@@ -50,7 +37,6 @@ location /api/live/ {
 | `/api/me/layouts/<dashboard>/` | GET, PUT, DELETE their arrangement |
 | `/api/nav/` | The nav places this viewer sees |
 | `/api/v1/accounts/s2s/identity/linkedtrust/<sub>/` | For roots, with `Authorization: Bearer <S2S_TOKEN>`: the person and their orgs. Same path and answer as GovKit |
-| `/api/live/?topics=<org>/<thing>` | Server-sent events |
 
 ## Dashboards
 

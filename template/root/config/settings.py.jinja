@@ -43,7 +43,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "config.urls"
-ASGI_APPLICATION = "config.asgi.application"
+WSGI_APPLICATION = "config.wsgi.application"
 
 TEMPLATES = [
     {
@@ -108,9 +108,6 @@ CORS_ALLOW_HEADERS = [*default_headers, "x-baobab"]
 FRAME_URL = env("FRAME_URL").rstrip("/")
 S2S_TOKEN = env("S2S_TOKEN")
 MEMBERSHIP_CACHE_SECONDS = 60
-
-# --- Live updates (CONTRACT.md section 3). Needs Postgres and an ASGI server. ---
-LIVE = env.bool("LIVE", default=True) and DATABASES["default"]["ENGINE"].endswith("postgresql")
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ["api.security.EmbedSessionAuthentication"],

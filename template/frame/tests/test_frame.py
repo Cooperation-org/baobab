@@ -98,11 +98,6 @@ def test_s2s_identity_answers_like_govkit(client, member):
                       HTTP_AUTHORIZATION="Bearer t0k").status_code == 404
 
 
-@override_settings(LIVE=True)
-def test_live_refuses_topics_outside_your_orgs(client, member):
-    client.force_login(member)
-    assert client.get("/api/live/?topics=other/items").status_code == 403
-
 
 def test_sign_in_links_by_verified_email_then_by_id(member):
     assert person_for({"sub": "7", "email": "A@example.com", "email_verified": True}) == member
