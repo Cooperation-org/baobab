@@ -261,6 +261,8 @@ The frame's log says why a card was left out of a dashboard.
   (`/sso/<clientId>`, `oidcApi.ts:145-150`), but the client record has no list of providers
   (`trust_claim_backend/prisma/schema.prisma:334-345`). Showing only chosen providers
   means either a field on that record, or the app's own buttons.
+  Project owner, 2026-09-27: default LinkedTrust, configurable. Not built: which of the two
+  carries the list.
 - **C.** How a root learns orgs and roles. Decided 2026-09-27: GovKit's shape. The frame
   answers `GET /api/v1/accounts/s2s/identity/<provider>/<subject>/` (bearer `S2S_TOKEN`) with
   `{display_name, email, pool, memberships: [{org_slug, org_name, role}]}`, 404 for a
@@ -276,7 +278,7 @@ Verified 2026-09-26 against the templates as they are.
   against Postgres. The code is in `live.py`; the tests cover only the refusal of topics
   outside a person's orgs.
 - Signing out of the frame does not sign out of LinkedTrust (it has no sign-out endpoint),
-  so the next sign-in is one click.
+  so the next sign-in is one click. Project owner, 2026-09-27: not required.
 - `AUTH_PROVIDERS` values other than `linkedtrust` show no button yet (Open decision B).
 - Cards over a vine that only takes bearer tokens (Open decision A). Working example to
   copy: `<govkit-tasks>` on the workers.vc dash reads Taiga through GovKit, server-side, with

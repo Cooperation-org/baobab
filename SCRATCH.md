@@ -159,3 +159,7 @@ README.
 
 Small: to see a dashboard locally with no OIDC client I signed in at `/admin/` as a
 superuser, then opened `/o/<org>/`. Worth a line in the frame README.
+
+→ 2026-09-27: VolKit updated to baobab `ab4b138` with `copier update` (volkit `d78696b`); its own
+  `dashboards/home.json` kept, its tests pass. Project owner: login buttons default LinkedTrust,
+  configurable (Open decision B); signing out of LinkedTrust not required.
