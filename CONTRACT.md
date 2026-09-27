@@ -24,6 +24,8 @@ A frontend reads one of two things:
 - Every piece signs in with OIDC. The issuer is `OIDC_ISSUER`, default
   `https://live.linkedtrust.us`. Discovery (`/.well-known/openid-configuration`) is the only
   thing a piece reads about the provider.
+- Each app registers its own client: `trust_claim_backend/scripts/register-oidc-client.ts`,
+  steps in the generated README under "Sign-in".
 - One sign-in, no re-login: LinkedTrust keeps its own session, so when a second piece sends
   the person to `/oauth/authorize` they come straight back without a login page.
 - Dashboard app and backend: `django-linkedtrust-auth` for the redirect and code exchange;
@@ -225,6 +227,5 @@ dashboard app made from these templates. The backend caches the answer for a min
 
 ## Not tested
 
-- A sign-in through LinkedTrust end to end, in any template.
 - A backend asking GovKit (section 14): the tests use a mocked answer.
 - A frontend on an existing system (`VITE_SIGNIN_URL`) against Odoo.

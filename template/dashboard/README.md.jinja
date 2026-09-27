@@ -23,6 +23,19 @@ Production: `gunicorn config.wsgi:application`, after `manage.py collectstatic`.
 To see a dashboard locally without an OIDC client: sign in at `/admin/` as the superuser,
 add yourself as a member on an org's admin page, then open `/o/<org>/`.
 
+## Sign-in (LinkedTrust)
+
+1. Register a client, one per app. The LinkedTrust admin runs, in `trust_claim_backend`:
+   ```
+   npx ts-node scripts/register-oidc-client.ts --name "{{ name }}" \
+     --redirect https://<this app's host>/auth/linkedtrust/callback
+   ```
+   Add a second `--redirect` for `http://localhost:8000/auth/linkedtrust/callback` to sign in locally.
+2. Put the printed `client_id` and `client_secret` (shown once) in `.env` as
+   `OIDC_CLIENT_ID` and `OIDC_CLIENT_SECRET`.
+
+Endpoints, scopes and the flow: `trust_claim_backend/docs/sso-integration.md`.
+
 ## What it serves
 
 | Path | What |
