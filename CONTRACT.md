@@ -36,12 +36,10 @@ root, never in the browser, and the root acts as the signed-in person (Open deci
   a login page (`oidcApi.ts:137-155`). So each piece runs its own OIDC login, and the
   person sees one sign-in.
 - Frame and root: `django-linkedtrust-auth` (Cooperation-org, v1.2.0) for the redirect and
-  code exchange; the templates' `person_for` decides the account: by the provider's `sub`,
-  else a new account, never an existing one found by email. LinkedTrust sends
-  `email_verified: true` for every email, including password sign-ups it never checked
-  (`trust_claim_backend/src/lib/oidc.ts:195-197`, `src/api/oidcApi.ts:314-316`), so an
-  email match lets whoever registers an address first take over the account. An admin
-  links an existing account by adding its Identity row.
+  code exchange; the templates' `person_for` decides the account. It links a sign-in to an
+  existing account only when the provider marks the email verified, exactly one account has
+  it, and that account has no id from this provider yet. Anything looser lets whoever holds
+  a matching email take over an account.
 - Frond on a root: the root does the sign-in; the frond app sends the person to the root's
   login and uses the root's session cookie.
 - Frond on a vine: the system does the sign-in through its own OIDC support (Taiga:
@@ -218,8 +216,8 @@ meeting the contract, not by being regenerated. Copy code from the templates rat
 writing it again.
 
 1. **Sign-in** through OIDC against `OIDC_ISSUER` (section 1). A Django app copies
-   `template/root/api/auth.py` and its `Identity` model. Existing accounts are linked by an
-   admin adding Identity rows, never by email match (section 1). Existing password logins can stay until the
+   `template/root/api/auth.py` and its `Identity` model, which link an existing account
+   only by a verified, unambiguous email. Existing password logins can stay until the
    project owner says otherwise.
 2. **Permissions stay the app's own**, checked server-side on every request. If the app has
    orgs that the frame also has, the org comes from the URL path and is checked with the

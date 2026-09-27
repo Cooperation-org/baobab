@@ -70,10 +70,8 @@ Each element from PRINCIPLES.md, as rules you can check in a diff.
 
 ## Accounts
 
-- Never link a sign-in to an existing account by email. LinkedTrust marks every email
-  verified, including ones it never checked (`trust_claim_backend/src/lib/oidc.ts:195-197`).
-  A first sign-in is a new account; an admin links an old one by adding its Identity
-  (templates: `person_for` in `auth.py`).
+- Never link a sign-in to an existing account by email unless the provider marks the email
+  verified and exactly one account matches (templates: `person_for` in `auth.py`).
 
 ## A card with nothing to show hides
 

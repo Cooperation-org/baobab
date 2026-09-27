@@ -55,10 +55,10 @@ def person_for(userinfo):
     """The person this sign-in belongs to.
 
     1. Already seen: by the provider's id for them (`sub`).
-    2. Else a new account. Never an existing account found by email: LinkedTrust sends
-       `email_verified: true` for every email, including password sign-ups it never
-       verified, so matching by email lets whoever registers an address first take over
-       the account that has it. An admin links an existing account by adding its Identity.
+    2. Else an existing account, only when the provider says the email is verified,
+       exactly one account has it, and that account has no id from this provider yet.
+       Anything looser lets whoever controls a matching email take over an account.
+    3. Else a new account.
     """
     User = get_user_model()
     sub = str(userinfo.get("sub") or "")
@@ -68,13 +68,19 @@ def person_for(userinfo):
     found = Identity.objects.select_related("user").filter(issuer=settings.OIDC_ISSUER, sub=sub).first()
     if found:
         return found.user
-    user = User.objects.create_user(
-        username=free_username(User, email or f"{sub}@{urlsplit(settings.OIDC_ISSUER).netloc}"),
-        email=email,
-        first_name=(userinfo.get("name") or "")[:150],
-    )
-    user.set_unusable_password()
-    user.save()
+    user = None
+    if email and userinfo.get("email_verified") is True:
+        matches = list(User.objects.filter(email__iexact=email)[:2])
+        if len(matches) == 1 and not matches[0].identities.filter(issuer=settings.OIDC_ISSUER).exists():
+            user = matches[0]
+    if user is None:
+        user = User.objects.create_user(
+            username=free_username(User, email or f"{sub}@{urlsplit(settings.OIDC_ISSUER).netloc}"),
+            email=email,
+            first_name=(userinfo.get("name") or "")[:150],
+        )
+        user.set_unusable_password()
+        user.save()
     Identity.objects.create(user=user, issuer=settings.OIDC_ISSUER, sub=sub)
     return user
 

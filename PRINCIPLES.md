@@ -17,6 +17,7 @@
 | **Existing systems stay the record.** We connect (vine); we do not copy or replace. | a good citizen, boundaries |
 | **Every cross-piece address is a setting. Unset means off, never broken.** | malleable |
 | **One sign-in.** Moving between pieces never asks the person to log in again. | experience |
+| **One account per person.** A sign-in joins the existing account with the same email. Ease for existing users comes first. | experience |
 | **A card with nothing to show hides.** No placeholders, no errors on someone else's page. | experience |
 | **A person's layout is theirs.** What they arrange stays arranged. | intention |
 | **Published links never change.** | experience, boundaries |
@@ -33,5 +34,7 @@
   But we do want the choices."
 - "Configurable things with conventions, so they're simple to install but they are
   configurable."
+- "Absolutely do email matching, things need to be easy and keep single user account.
+  Convenience and ease for existing users is the number one most important thing."
 
 For anything a person looks at: [UX principles](https://github.com/Cooperation-org/govkit/blob/main/UX_PRINCIPLES.md).
