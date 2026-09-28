@@ -186,3 +186,23 @@ network tab on the dashboard page:
 3. The answer has rows.
 
 The dashboard app's log says why a card was left out of a dashboard.
+
+## 14. Adding an API (planned; not in the templates yet)
+
+A dashboard will hook up any API, ours or not, local or remote, as an entry under Apps:
+
+| Field | Holds |
+|---|---|
+| `api_url` | the endpoint |
+| `spec` | its OpenAPI or GraphQL schema, checked in or linked, pinned to a version |
+| `auth` | `linkedtrust` (preferred); `api-key`, a service account held by a layer (section 12); or `oauth`, the service's own, each person connecting once |
+| `cost` | free, trial until a date, or paid, and who pays. A paid service can be offered to the clients who use the dashboard |
+
+A service that takes a generic OIDC provider can sign in with LinkedTrust (Postiz does).
+
+Web components are written from the spec: each names the spec and version it fits, so they
+can be written mostly automatically and checked against it. Whether they share adapters or
+are specific to one API is open.
+
+Wanted: Mobilize and Google Calendar (VolKit's events, push and pull), Parabol (hosted
+retros), Postiz (hosted, while its trial lasts).
