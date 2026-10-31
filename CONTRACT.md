@@ -94,6 +94,13 @@ bar with every place a person works, including existing systems (Taiga, the CRM)
 that loads it looks like part of one place. Places are data in the dashboard app: a label and
 a URL. On workers.vc the bar is `<cohort-nav>` (`workers.vc/static/embed/cohort-nav.js`).
 
+**Suggested layout, not required.** Each app has its own popout, hideable side menu for its own
+pages, and keeps search and filters in its own bar on top. The thin bar at the very top belongs to
+the parent framework of installed components: one word per component (`crm | tasks | money | gov`),
+all behind LinkedTrust sign-in (section 1). It shows only when the app is reached under that
+framework; alone, the app has no thin bar. An app that shows claims displays them; they live on
+LinkedClaims (section 3).
+
 ## 7. Theme
 
 The dashboard app serves `/static/embed/theme.css`: CSS custom properties only, prefix
