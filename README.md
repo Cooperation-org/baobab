@@ -17,7 +17,7 @@ Templates and rules for building on a single sign-on, in the project owner's wor
 
 GovKit (`dash.workers.vc`) is the dashboard for workers.vc. It does not change to fit this repo.
 
-Read [CONTRACT.md](CONTRACT.md). Agents: [AGENTS.md](AGENTS.md). Web components that exist:
+Read [CONTRACT.md](CONTRACT.md). Shapes that repeat across apps: [patterns/](patterns/README.md). Agents: [AGENTS.md](AGENTS.md). Web components that exist:
 [COMPONENTS.md](COMPONENTS.md), running at https://demos.linkedtrust.us/baobab/components/.
 
 ## Pick one
