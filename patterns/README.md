@@ -7,7 +7,7 @@ AI-written from them and is corrected here when wrong.
 | The work | Pattern |
 |---|---|
 | Many inputs, narrowed to the few facts one audience needs today (contacts to reach, news to act on, tasks) | [inputs-to-views.md](inputs-to-views.md) |
-| Figures that must agree exactly with a source of truth (bank, budget, tickets, a signed document) | [reconciliation.md](reconciliation.md) |
+| Figures checked against a source of truth, every item counted: a bank balance that must agree; a budget or tickets where each difference is shown per line | [reconciliation.md](reconciliation.md) |
 
 The two are different. A view of top things may leave things out. A reconciliation may not.
 
