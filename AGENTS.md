@@ -1,6 +1,7 @@
 # For agents working in baobab, or in anything made from it
 
-Read [CONTRACT.md](CONTRACT.md). Below: its rules as checks on a diff. Before designing a
+No app is built in this repo; each app is its own repo that follows the contract
+([README.md](README.md), "Add something"). Read [CONTRACT.md](CONTRACT.md). Below: its rules as checks on a diff. Before designing a
 feature, pick its shape in [patterns/](patterns/README.md).
 
 ## Checks

@@ -1,6 +1,26 @@
 # baobab
 
-Templates and rules for building on a single sign-on, in the project owner's words:
+**Apps are not built in this repo.** Each app is its own repo, built by its own developers, and
+follows [CONTRACT.md](CONTRACT.md). That gives every app the same LinkedTrust sign-in, the same
+nav bar and theme, and web components any dashboard can show. This repo holds only the contract,
+two starter templates, the [patterns](patterns/README.md), and the
+[gallery of shared components](COMPONENTS.md).
+
+## Add something
+
+1. **Repo.** A new system: `uvx copier copy --trust gh:Cooperation-org/baobab <your-app>`
+   (backend template). An app that already exists keeps its code and follows
+   [CONTRACT.md section 12](CONTRACT.md#12-bringing-an-existing-system-in).
+2. **Sign-in.** Register your own LinkedTrust OIDC client ([section 1](CONTRACT.md#1-sign-in)).
+3. **Components.** Ship `static/embed/<slug>.js` from your backend
+   ([section 2](CONTRACT.md#2-web-components)), and add a row to [COMPONENTS.md](COMPONENTS.md).
+4. **Menu.** Ask whoever runs the dashboard to add your app under Apps. A place in the nav
+   bar is a row in that dashboard's data (a label and a URL), not a change to its code
+   ([section 6](CONTRACT.md#6-nav-bar)).
+
+No step needs another team to change their code. Your app links to records in other systems by URL.
+
+## Why, in the project owner's words
 
 - "The top level thing is a single sign-on."
 - "Different backends, including existing open source, making it easy to start a new project
