@@ -89,8 +89,8 @@ gains redirects; it is never removed or reshaped.
 
 ## 6. Nav bar
 
-The dashboard app serves `/static/embed/nav.js`, `<site-nav data-up="<dashboard app>">`: one
-bar with every place a person works, including existing systems (Taiga, the CRM). Any app
+Each instance (dashboard app) has its own nav bar; baobab has none. The dashboard app serves `/static/embed/nav.js`, `<site-nav data-up="<dashboard app>">`: its
+bar with every place a person works in that instance, including existing systems (Taiga, the CRM). Any app
 that loads it looks like part of one place. Places are data in the dashboard app: a label and
 a URL. On workers.vc the bar is `<cohort-nav>` (`workers.vc/static/embed/cohort-nav.js`).
 

@@ -1,8 +1,9 @@
 # baobab
 
 **Apps are not built in this repo.** Each app is its own repo, built by its own developers, and
-follows [CONTRACT.md](CONTRACT.md). That gives every app the same LinkedTrust sign-in, the same
-nav bar and theme, and web components any dashboard can show. This repo holds only the contract,
+follows [CONTRACT.md](CONTRACT.md). That gives every app the same LinkedTrust sign-in and web
+components any instance can show. The nav bar and theme belong to each instance (a dashboard
+app: workers.vc, VolKit), not to baobab; one app can appear in several instances' nav bars. This repo holds only the contract,
 two starter templates, the [patterns](patterns/README.md), and the
 [gallery of shared components](COMPONENTS.md).
 
@@ -14,8 +15,9 @@ two starter templates, the [patterns](patterns/README.md), and the
 2. **Sign-in.** Register your own LinkedTrust OIDC client ([section 1](CONTRACT.md#1-sign-in)).
 3. **Components.** Ship `static/embed/<slug>.js` from your backend
    ([section 2](CONTRACT.md#2-web-components)), and add a row to [COMPONENTS.md](COMPONENTS.md).
-4. **Menu.** Ask whoever runs the dashboard to add your app under Apps. A place in the nav
-   bar is a row in that dashboard's data (a label and a URL), not a change to its code
+4. **Menu.** Ask whoever runs each instance you want to appear in to add your app under Apps.
+   A place in that instance's nav bar is a row in its data (a label and a URL), not a change
+   to its code
    ([section 6](CONTRACT.md#6-nav-bar)).
 
 No step needs another team to change their code. Your app links to records in other systems by URL.
